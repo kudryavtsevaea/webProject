@@ -54,7 +54,9 @@ private String presentSimple;
     }
 
     @Override
-    public int compareTo(Verbs o) {
-        return 0;
+    public int compareTo(Verbs o1) {
+        if(o1 == null)
+            return 1;
+        else return -1;
     }
 }
