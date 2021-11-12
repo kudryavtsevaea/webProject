@@ -1,10 +1,11 @@
-public class Verbs implements Comparable<Verbs> {
-private String presentSimple;
+public class Verb {
+    private String presentSimple;
     private String pastSimple;
     private String perfectSimple;
     private String rusName;
 
-    public Verbs(String presentSimple, String pastSimple, String perfectSimple, String rusName) {
+    public Verb(String presentSimple, String pastSimple,
+                String perfectSimple, String rusName) {
         this.presentSimple = presentSimple;
         this.pastSimple = pastSimple;
         this.perfectSimple = perfectSimple;
@@ -53,10 +54,4 @@ private String presentSimple;
                 '}';
     }
 
-    @Override
-    public int compareTo(Verbs o1) {
-        if(o1 == null)
-            return 1;
-        else return -1;
-    }
 }

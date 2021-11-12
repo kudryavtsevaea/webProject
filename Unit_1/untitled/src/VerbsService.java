@@ -5,7 +5,7 @@ import java.util.*;
 
 public class VerbsService {
    private static VerbsService INSTANCE;
-   private TreeSet<Verbs> verbs = new TreeSet<>();
+   private List<Verb> verbs = new ArrayList<>();
 
    private VerbsService(){
        try (Scanner sc = new Scanner(new File
@@ -14,7 +14,7 @@ public class VerbsService {
            while (sc.hasNextLine()){
                String s = sc.nextLine();
                String[] split = s.split(";");
-               Verbs verb = new Verbs(split[0], split[1], split[2], split[3]);
+               Verb verb = new Verb(split[0], split[1], split[2], split[3]);
                verbs.add(verb);
            }
        }
@@ -31,20 +31,21 @@ public class VerbsService {
 
     }
 
-    public TreeSet<Verbs> getVerbs(){
+    public List<Verb> getVerbs(){
         return verbs;
     }
 
-    public void getShuffle(List<Verbs> verb){
-        Collections.shuffle(verb);
 
-        Iterator<Verbs> iterator = verb.iterator();
-        int count = 0;
-        System.out.println("Shuffle:");
-        while(iterator.hasNext()){
-            System.out.println(++count + " : "
-                    + iterator.next());
+    public static Verb printVerbs(TreeSet<Verb> sortedVerbs, String alp){
+        Iterator<Verb> iterator = sortedVerbs.iterator();
+        Verb verb;
+        while (iterator.hasNext()) {
+            verb = iterator.next();
+            if (verb.getRusName().startsWith(alp)) {
+                return verb;
+            }
         }
+        return null;
     }
 
 }

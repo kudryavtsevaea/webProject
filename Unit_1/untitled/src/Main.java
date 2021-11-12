@@ -1,3 +1,4 @@
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.lang.*;
 
@@ -6,49 +7,53 @@ public class Main {
     public static void main(String[] args) {
 
         VerbsService verbsService = VerbsService.getInstance();
-        TreeSet<Verbs> verbs = verbsService.getVerbs();
+        List<Verb> verbs = verbsService.getVerbs();
 
-        List <Verbs> notSorted;
-        notSorted = verbs.stream().toList();
-//        Collections.shuffle(notSorted);
-        notSorted.forEach(System.out::println);
+        verbs.forEach(System.out::println);
 
         System.out.println("-----------------------------------");
 
-        TreeSet<Verbs> sortedVerbs = new TreeSet<>(
-                (o1, o2) -> o1.getPresentSimple().compareTo(o2.getPresentSimple()));
-
-        sortedVerbs.addAll(verbs);
-
-        Iterator<Verbs> iterator = sortedVerbs.iterator();
-        int count = 0;
-        while (iterator.hasNext()) {
-            Verbs verb = iterator.next();
-                System.out.println(++count + " : "
-                     + iterator.next());
-        }
+        Collections.shuffle(verbs);
+        verbs.forEach(System.out::println);
 
         System.out.println("-----------------------------------");
 
-        Iterator<Verbs> iterator2 = sortedVerbs.iterator();
 
-        while (iterator2.hasNext()) {
-            Verbs verb = iterator2.next();
-            if (verb.getRusName().startsWith("ñ")) {
-                System.out.println(verbs);
-                break;
-            }
-        }
+        TreeSet<Verb> sortedVerbs1 = new TreeSet<>((o1,o2) -> o1.
+                getRusName().compareTo(o2.getRusName()));
+
+        sortedVerbs1.addAll(verbs);
+
+        sortedVerbs1.forEach(System.out::println);
+
+        System.out.println("-----------------------------------");
+        Comparator<Verb>
+                rusNameComparator = Comparator.comparing(Verb::getPresentSimple);
+
+        TreeSet<Verb> sortedVerbs2 = new TreeSet<>(rusNameComparator);
+
+        sortedVerbs2.addAll(verbs);
+
+        sortedVerbs2.forEach(System.out::println);
 
         System.out.println("-----------------------------------");
 
-        while (iterator2.hasNext()) {
-            Verbs verb = iterator2.next();
-            if (verb.getRusName().startsWith("ò")) {
-                System.out.println(verbs);
-                break;
-            }
-        }
+        System.out.println(VerbsService.printVerbs(sortedVerbs1, "ñ"));
+
+
+        System.out.println("-----------------------------------");
+
+
+        System.out.println(VerbsService.printVerbs(sortedVerbs1, "ò"));
+//
+//        System.out.println("-----------------------------------");
+//
+//        NavigableSet<Verb> navigableSet = sortedVerbs1;
+//
+//        navigableSet.subSet(verbsService.printVerbs(sortedVerbs1, "c"),
+//                verbsService.printVerbs(sortedVerbs1, "ò"));
+//
+//        navigableSet.forEach(System.out::println);
 
     }
 }
