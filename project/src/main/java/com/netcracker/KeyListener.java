@@ -6,6 +6,15 @@ import java.util.Scanner;
 public class KeyListener {
     private Library lib;
 
+    final String ONE = "1";
+    final String TWO = "2";
+    final String THREE = "3";
+    final String FOUR = "4";
+    final String FIVE = "5";
+    final String SIX = "6";
+    final String SEVEN = "7";
+    final String EIGHT = "8";
+    final String NINE = "9";
     final String TEN = "10";
     final String ELEVEN = "11";
     final String TWELVE = "12";
@@ -22,45 +31,45 @@ public class KeyListener {
                 System.out.println("До свидания!");
                 System.exit(0);
                 break;
-            case "1":
+            case ONE:
                 //просмотреть все взятые книги
                 lib.showAllBooksOnHands();
                 System.out.println("<- Назад         Выход(q)");
                 break;
-            case "2":
+            case TWO:
                 //взять книгу
                 lib.getBook(info);
                 System.out.println("<- Назад         Выход(q)");
                 break;
-            case "3":
+            case THREE:
                 //вернуть книгу
                 System.out.println("<- Назад         Выход(q)");
                 break;
-            case "4":
+            case FOUR:
                 //найти книгу
                 lib.findBookByName(info);
                 System.out.println("<- Назад         Выход(q)");
                 break;
-            case "5":
+            case FIVE:
                 lib.showAllBooks();
                 System.out.println("<- Назад         Выход(q)");
                 break;
-            case "6":
+            case SIX:
                 //добавить пользователя
                 //addUser
                 System.out.println("<- Назад         Выход(q)");
                 break;
-            case "7":
+            case SEVEN:
                 //удалить пользователя
                 lib.deleteReader(info);
                 System.out.println("<- Назад         Выход(q)");
                 break;
-            case "8":
+            case EIGHT:
                 //удалить книгу
                 lib.deleteBook(info);
                 System.out.println("<- Назад         Выход(q)");
                 break;
-            case "9":
+            case NINE:
                 //добавить книгу
                 //addBook
                 System.out.println("<- Назад         Выход(q)");
