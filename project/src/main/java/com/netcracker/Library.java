@@ -1,9 +1,14 @@
 package com.netcracker;
 
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.sql.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 //model class
@@ -68,95 +73,8 @@ public class Library {
         specificBooks.stream().filter((b) -> b.equals(name)).findFirst().get().setHandedOut(true);
     }
 
-   // public static final String DELETE_USER = "delete from reader where readerName = name";
-
-//    public void deleteReader(String name) throws SQLException {
-//        if (users.contains(name)) {
-//            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER);
-//        }
-//        else {
-//            System.out.println("Данный пользователь не существует");
-//        }
-//    }
-
-    public void deleteReader(String name){
-        if (users.contains(name)) {
-           users.remove(name);
-        }
-        else {
-            System.out.println("Данный пользователь не существует");
-        }
-    }
-
-//    public static final String DELETE_BOOK = "delete from book where nameOfBook = name";
-//
-//     public void deleteBook(String name) throws SQLException {
-//         if (books.contains(name)){
-//        PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BOOK);
-//         }
-//         else {
-//             System.out.println("Данной книге нет в библиотеке");
-//         }
-//     }
-
-    public void deleteBook(String name){
-        if (books.contains(name)) {
-           books.remove(name);
-        }
-        else {
-            System.out.println("Данной книги нет в библиотеке");
-        }
-    }
-
-
-
-    public void showAllBooksOnHands() throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(FIND_BOOK_ON_HANDS);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        System.out.println(resultSet.getInt(1) + " " + resultSet.getString(2) + " " +
-                resultSet.getBoolean(3));
-    }
-
-    public static final String FIND_BOOK_ON_HANDS = "select * from specificbook where isHandedOut = 1";
-
-
-    public void addBook(Book book, Connection connection) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_BOOK);
-        preparedStatement.setString(1, book.getAuthor());
-        preparedStatement.setString(2, book.getNameOfBook());
-        preparedStatement.setInt(3, book.getYearOfPublishing());
-        preparedStatement.setInt(4, book.getAmountOfPages());
-    }
-
-    public static final String INSERT_BOOK = "insert into book " +
-            "(\"author\",\"nameOfBook\", \"yearOfPublishing\",\"amountOfPages\")  values (?,?,?,?)";
-
-    public void addUser(User user, Connection connection) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_READER);
-        preparedStatement.setString(1, user.getReaderName());
-        preparedStatement.setBoolean(2, user.isHasBook());
-        preparedStatement.setInt(3, user.getWhichBook());
-    }
-
-    public static final String INSERT_READER = "insert into readerWithBook " +
-            "(\"readerName\",\"hasBook\", \"whichBook\")  values (?,?,?)";
-
-//    public static final String FIND_BOOK = "select * from book where nameOfBook = name";
-//
-//    public void findBookByName() throws SQLException {
-//        PreparedStatement preparedStatement = connection.prepareStatement(FIND_BOOK);
-//        ResultSet resultSet = preparedStatement.executeQuery();
-//        System.out.println(resultSet.getString(1) + " " + resultSet.getString(2) +
-//             " " + resultSet.getInt(3) +  " " + resultSet.getInt(4));
-//    }
-
-    public void findBookByName(String name) {
-        System.out.println(books.stream().filter((book -> book.getNameOfBook()
-                .equals(name))).findFirst().get());
-    }
-
-    public void addListOfBooks(File file){
-        try(Scanner sc = new Scanner(file)){
+    public void addListOfBooks(String path){
+        try(Scanner sc = new Scanner(new File(path))){
             while(sc.hasNextLine()){
                 String s = sc.next();
                 String[] str = s.split(";");
@@ -199,4 +117,116 @@ public class Library {
         }
     }
 
+    public void searchByRegex(String requiredString){
+        Pattern pattern = Pattern.compile(requiredString, Pattern.CASE_INSENSITIVE);
+        for (Book w : books) {
+            Matcher matcher = pattern.matcher(w.getNameOfBook());
+            while (matcher.find()) {
+                System.out.println(w);
+            }
+
+        }
+    }
+
+    public void deleteReader(String name){
+        if (users.contains(name)) {
+            users.remove(name);
+        }
+        else {
+            System.out.println("Данный пользователь не существует");
+        }
+    }
+
+    public void deleteBook(String name){
+        if (books.contains(name)) {
+            books.remove(name);
+        }
+        else {
+            System.out.println("Данной книги нет в библиотеке");
+        }
+    }
+
+    public void showAllBooksOnHands(){
+        System.out.println(specificBooks.stream().filter(book -> book.isHandedOut() == true)
+                .collect(Collectors.toList()));
+    }
+
+    public void addBook(String book){
+        String[] str = book.split(";");
+        books.add(new Book(str[1], str[2], Integer.parseInt(str[3]), Integer.parseInt(str[4])));
+    }
+
+    public void addUser(String user){
+        String[] str = user.split(";");
+        users.add(new User(Integer.parseInt(str[1]), str[2], Boolean.getBoolean(str[3]),
+                Integer.parseInt(str[4])));
+    }
+
+    public void findBookByName(String name) {
+        System.out.println(books.stream().filter((book -> book.getNameOfBook()
+                .equals(name))).findFirst().get());
+    }
+
+// public static final String DELETE_USER = "delete from reader where readerName = name";
+
+//    public void deleteReader(String name) throws SQLException {
+//        if (users.contains(name)) {
+//            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER);
+//        }
+//        else {
+//            System.out.println("Данный пользователь не существует");
+//        }
+//    }
+
+//    public static final String DELETE_BOOK = "delete from book where nameOfBook = name";
+//
+//     public void deleteBook(String name) throws SQLException {
+//         if (books.contains(name)){
+//        PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BOOK);
+//         }
+//         else {
+//             System.out.println("Данной книге нет в библиотеке");
+//         }
+//     }
+
+//
+//    public void showAllBooksOnHands() throws SQLException {
+//        PreparedStatement preparedStatement = connection.prepareStatement(FIND_BOOK_ON_HANDS);
+//        ResultSet resultSet = preparedStatement.executeQuery();
+//        System.out.println(resultSet.getInt(1) + " " + resultSet.getString(2) + " " +
+//                resultSet.getBoolean(3));
+//    }
+//
+//    public static final String FIND_BOOK_ON_HANDS = "select * from specificbook where isHandedOut = 1";
+
+
+//    public void addBook(Book book, Connection connection) throws SQLException {
+//        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_BOOK);
+//        preparedStatement.setString(1, book.getAuthor());
+//        preparedStatement.setString(2, book.getNameOfBook());
+//        preparedStatement.setInt(3, book.getYearOfPublishing());
+//        preparedStatement.setInt(4, book.getAmountOfPages());
+//    }
+//
+//    public static final String INSERT_BOOK = "insert into book " +
+//            "(\"author\",\"nameOfBook\", \"yearOfPublishing\",\"amountOfPages\")  values (?,?,?,?)";
+
+//    public void addUser(User user, Connection connection) throws SQLException {
+//        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_READER);
+//        preparedStatement.setString(1, user.getReaderName());
+//        preparedStatement.setBoolean(2, user.isHasBook());
+//        preparedStatement.setInt(3, user.getWhichBook());
+//    }
+//
+//    public static final String INSERT_READER = "insert into readerWithBook " +
+//            "(\"readerName\",\"hasBook\", \"whichBook\")  values (?,?,?)";
+
+//    public static final String FIND_BOOK = "select * from book where nameOfBook = name";
+//
+//    public void findBookByName() throws SQLException {
+//        PreparedStatement preparedStatement = connection.prepareStatement(FIND_BOOK);
+//        ResultSet resultSet = preparedStatement.executeQuery();
+//        System.out.println(resultSet.getString(1) + " " + resultSet.getString(2) +
+//             " " + resultSet.getInt(3) +  " " + resultSet.getInt(4));
+//    }
 }

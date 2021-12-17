@@ -18,6 +18,8 @@ public class KeyListener {
     final String TEN = "10";
     final String ELEVEN = "11";
     final String TWELVE = "12";
+    final String THIRTEEN = "13";
+    final String FOURTEEN = "14";
     final String LEFT = "<";
     final String QUIT = "q";
 
@@ -51,12 +53,13 @@ public class KeyListener {
                 System.out.println("<- Назад         Выход(q)");
                 break;
             case FIVE:
+                //просмотреть все книги в библиотеке
                 lib.showAllBooks();
                 System.out.println("<- Назад         Выход(q)");
                 break;
             case SIX:
                 //добавить пользователя
-                //addUser
+                lib.addUser(info);
                 System.out.println("<- Назад         Выход(q)");
                 break;
             case SEVEN:
@@ -71,7 +74,7 @@ public class KeyListener {
                 break;
             case NINE:
                 //добавить книгу
-                //addBook
+                lib.addBook(info);
                 System.out.println("<- Назад         Выход(q)");
                 break;
             case TEN:
@@ -85,6 +88,16 @@ public class KeyListener {
                 break;
             case TWELVE:
                 //изменить поле книги
+                System.out.println("<- Назад         Выход(q)");
+                break;
+            case THIRTEEN:
+                //найти книгу по регулярному выражению
+                lib.searchByRegex(info);
+                System.out.println("<- Назад         Выход(q)");
+                break;
+            case FOURTEEN:
+                //добавить список книг из файла
+                lib.addListOfBooks(info);
                 System.out.println("<- Назад         Выход(q)");
                 break;
             case LEFT:
