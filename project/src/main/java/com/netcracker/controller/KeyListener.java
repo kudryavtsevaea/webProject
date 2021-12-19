@@ -1,9 +1,6 @@
 package com.netcracker.controller;
 
-import com.netcracker.models.Book;
-import com.netcracker.models.SpecificBook;
 import com.netcracker.view.LibrarySystem;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 
 import java.sql.SQLException;
 import java.util.Scanner;
