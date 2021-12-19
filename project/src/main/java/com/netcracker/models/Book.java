@@ -1,4 +1,6 @@
-package com.netcracker;
+package com.netcracker.models;
+
+import org.apache.tapestry5.annotations.Id;
 
 public class Book {
     private String author;

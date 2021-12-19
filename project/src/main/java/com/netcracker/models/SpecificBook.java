@@ -1,9 +1,9 @@
-package com.netcracker;
+package com.netcracker.models;
 
 import java.awt.print.Book;
 
-public class SpecificBook<I extends Number, B> extends Book {
-    private long inventoryNumber;
+public class SpecificBook extends Book {
+    private int inventoryNumber;
     private Book book;
     private boolean isHandedOut;
 
@@ -19,7 +19,7 @@ public class SpecificBook<I extends Number, B> extends Book {
         isHandedOut = handedOut;
     }
 
-    public SpecificBook(long inventoryNumber, String author, String nameOfBook
+    public SpecificBook(int inventoryNumber, String author, String nameOfBook
             , int yearOfPublishing, int amountOfPages) {
         this.book = new Book();
         this.inventoryNumber = inventoryNumber;
