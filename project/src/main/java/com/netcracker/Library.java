@@ -1,10 +1,7 @@
 package com.netcracker;
 
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.file.Path;
 import java.sql.*;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -15,8 +12,7 @@ import java.util.stream.Collectors;
 public class Library {
 
     private Set<Book> books;
-    private Set<SpecificBook> specificBooks;
-    private Set<User> users;
+    private Set<SpecificBook> specificBooks = new TreeSet<>();
     private static Library INSTANCE = null;
     Connection connection = DriverManager.getConnection
                 ("jdbc:mysql://127.0.0.1:3306/librarydb", "root", "kryasan2");
@@ -28,14 +24,6 @@ public class Library {
                 Book book = new Book(resultSet1.getString(1), resultSet1.getString(2),
                         resultSet1.getInt(3), resultSet1.getInt(4));
             books.add(book);
-            }
-
-            PreparedStatement preparedStatement2 = connection.prepareStatement("select * from reader");
-            ResultSet resultSet2 = preparedStatement2.executeQuery();
-            while (resultSet2.next()) {
-                User user = new User(resultSet2.getInt(1), resultSet2.getString(2),
-                        resultSet2.getBoolean(3), resultSet2.getInt(4));
-                users.add(user);
             }
 
             PreparedStatement preparedStatement3 = connection.prepareStatement("select * from specificBookWithInfo");
@@ -63,10 +51,6 @@ public class Library {
         books.forEach(System.out::println);
     }
 
-    public  void showAllUsers(){
-        users.forEach(System.out::println);
-    }
-
     public void getBook(String name){
         System.out.println(specificBooks.stream().filter((b) -> b.equals(name))
                 .collect(Collectors.toList()));
@@ -80,21 +64,6 @@ public class Library {
                 String[] str = s.split(";");
                 Book book = new Book(str[0],str[1],Integer.parseInt(str[2]),Integer.parseInt(str[3]));
                 books.add(book);
-            }
-        }
-        catch(FileNotFoundException e){
-            System.out.println("Файл не найден");
-        }
-    }
-
-    public void addListOfUsers(File file){
-        try (Scanner sc = new Scanner(file)){
-            while (sc.hasNextLine()){
-                String s = sc.next();
-                String[] str = s.split(";");
-                User user = new User(Integer.parseInt(str[0]),str[1],Boolean.getBoolean(str[2])
-                        ,Integer.parseInt(str[3]));
-                users.add(user);
             }
         }
         catch(FileNotFoundException e){
@@ -128,15 +97,6 @@ public class Library {
         }
     }
 
-    public void deleteReader(String name){
-        if (users.contains(name)) {
-            users.remove(name);
-        }
-        else {
-            System.out.println("Данный пользователь не существует");
-        }
-    }
-
     public void deleteBook(String name){
         if (books.contains(name)) {
             books.remove(name);
@@ -156,15 +116,14 @@ public class Library {
         books.add(new Book(str[1], str[2], Integer.parseInt(str[3]), Integer.parseInt(str[4])));
     }
 
-    public void addUser(String user){
-        String[] str = user.split(";");
-        users.add(new User(Integer.parseInt(str[1]), str[2], Boolean.getBoolean(str[3]),
-                Integer.parseInt(str[4])));
-    }
-
     public void findBookByName(String name) {
         System.out.println(books.stream().filter((book -> book.getNameOfBook()
                 .equals(name))).findFirst().get());
+    }
+
+    public void renameBook(Book oldBook, Book newBook){
+        books.remove(oldBook);
+        books.add(newBook);
     }
 
 // public static final String DELETE_USER = "delete from reader where readerName = name";
@@ -210,16 +169,6 @@ public class Library {
 //
 //    public static final String INSERT_BOOK = "insert into book " +
 //            "(\"author\",\"nameOfBook\", \"yearOfPublishing\",\"amountOfPages\")  values (?,?,?,?)";
-
-//    public void addUser(User user, Connection connection) throws SQLException {
-//        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_READER);
-//        preparedStatement.setString(1, user.getReaderName());
-//        preparedStatement.setBoolean(2, user.isHasBook());
-//        preparedStatement.setInt(3, user.getWhichBook());
-//    }
-//
-//    public static final String INSERT_READER = "insert into readerWithBook " +
-//            "(\"readerName\",\"hasBook\", \"whichBook\")  values (?,?,?)";
 
 //    public static final String FIND_BOOK = "select * from book where nameOfBook = name";
 //
