@@ -1,11 +1,10 @@
 package com.netcracker.models;
 
-import java.awt.print.Book;
-
-public class SpecificBook extends Book {
+public class SpecificBook extends Book{
     private int inventoryNumber;
     private Book book;
     private boolean isHandedOut;
+
 
     public long getInventoryNumber() {
         return inventoryNumber;
@@ -19,10 +18,20 @@ public class SpecificBook extends Book {
         isHandedOut = handedOut;
     }
 
-    public SpecificBook(int inventoryNumber, String author, String nameOfBook
-            , int yearOfPublishing, int amountOfPages) {
-        this.book = new Book();
+    public SpecificBook(int inventoryNumber, String author, String nameOfBook, int yearOfPublishing,
+                        int amountOfPages) {
+        super(author,nameOfBook,yearOfPublishing,amountOfPages);
+        this.book = new Book(author,nameOfBook,yearOfPublishing,amountOfPages);
         this.inventoryNumber = inventoryNumber;
         this.isHandedOut = false;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "inventoryNumber = " + inventoryNumber +
+                ", book = " + book.toString() +
+                '}';
+    }
+
 }

@@ -9,6 +9,7 @@ public class KeyListener {
     private OperationsWithBooks operationsWithBooks;
     private OperationsWithSpecificBooks operationsWithSpecificBooks;
 
+
     private final String ONE = "1";
     private final String TWO = "2";
     private final String THREE = "3";
@@ -32,7 +33,7 @@ public class KeyListener {
                 System.out.println("До свидания!");
                 System.exit(0);
                 break;
-            case ONE:
+            case "1":
                 //показать все выданные книги
                 operationsWithSpecificBooks.showAllBooksOnHands();
                 LibrarySystem.backToMenu();

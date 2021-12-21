@@ -1,6 +1,5 @@
 package com.netcracker.controller;
 
-import com.netcracker.models.Book;
 import com.netcracker.models.Library;
 import com.netcracker.models.SpecificBook;
 
@@ -10,7 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class OperationsWithSpecificBooks {
     private Library lib = Library.getInstance();
@@ -19,13 +17,19 @@ public class OperationsWithSpecificBooks {
     }
 
     public void getBook(String name){
-        lib.specificBooks.stream().filter((b) -> b.equals(name))
-                .findFirst().get().setHandedOut(true);
+        for (SpecificBook b : lib.specificBooks){
+            if (name == b.getNameOfBook()){
+                b.setHandedOut(false);
+            }
+        }
     }
 
     public void putBook(int inventoryNumber){
-        lib.specificBooks.stream().filter((b) -> b.equals(inventoryNumber))
-                .findFirst().get().setHandedOut(false);
+        for (SpecificBook b : lib.specificBooks){
+            if (inventoryNumber == b.getInventoryNumber()){
+                b.setHandedOut(true);
+            }
+        }
     }
 
     public void showAllSpecificBooks() {
@@ -46,23 +50,17 @@ public class OperationsWithSpecificBooks {
         }
     }
 
-    public void addSpecificBook(String[] book){
-        for (SpecificBook s : lib.specificBooks){
-            if (s.getInventoryNumber() == Integer.parseInt(book[0])){
-                System.out.println("Книга с таким инвентарным номером уже существует.");
-            }
-        }
-        SpecificBook newSpecificBook = new SpecificBook(Integer.parseInt(book[0]), book[1], book[2],
-                Integer.parseInt(book[3]), Integer.parseInt(book[4]));
-        newSpecificBook.setHandedOut(false);
-        lib.specificBooks.add(newSpecificBook);
+    public void addSpecificBook(String[] str){
+        SpecificBook specificBook = new SpecificBook(Integer.parseInt(str[0]),
+               str[1],str[2],Integer.parseInt(str[3]),Integer.parseInt(str[4]));
+        specificBook.setHandedOut(false);
+        lib.specificBooks.add(specificBook);
     }
-
 
     public void addListOfSpecificBook(String path){
         try (Scanner sc = new Scanner(new File(path))){
             while (sc.hasNextLine()){
-                String s = sc.next();
+                String s = sc.nextLine();
                 String[] str = s.split(";");
                 SpecificBook specificBook = new SpecificBook(Integer.parseInt(str[0]),
                         str[1],str[2],Integer.parseInt(str[3]),Integer.parseInt(str[4]));
@@ -75,26 +73,26 @@ public class OperationsWithSpecificBooks {
     }
 
     public void deleteSpecificBook(int inventoryNumber){
-        if (lib.specificBooks.contains(inventoryNumber)) {
-            lib.specificBooks.remove(inventoryNumber);
-        }
-        else {
-            System.out.println("Данной книги нет в библиотеке.");
-        }
+//        for (SpecificBook s: lib.specificBooks){
+//            if (inventoryNumber == s.getInventoryNumber()){
+//                lib.specificBooks.remove(s);
+//            }
+//
     }
 
     public void replaceSpecificBook(int inventoryNumber, String[] str) {
-        if (lib.specificBooks.contains(inventoryNumber)){
-            boolean hands = lib.specificBooks.stream().filter((b) -> b.equals(inventoryNumber))
-                    .findFirst().get().isHandedOut();
-            lib.specificBooks.remove(inventoryNumber);
-            SpecificBook specificBook = new SpecificBook(Integer.parseInt(str[0]),str[1],str[2]
-                    ,Integer.parseInt(str[3]), Integer.parseInt(str[4]));
-            specificBook.setHandedOut(hands);
-            lib.specificBooks.add(specificBook);
-        }
-        else{
-            System.out.println("Такой книги не существует.");
-        }
+//        if (lib.specificBooks.contains(inventoryNumber)){
+//            boolean hands = lib.specificBooks.stream().filter((b) -> b.equals(inventoryNumber))
+//                    .findFirst().get().isHandedOut();
+//            lib.specificBooks.remove(inventoryNumber);
+//            SpecificBook specificBook = new SpecificBook(Integer.parseInt(str[0]), str[1],str[2]
+//                    ,Integer.parseInt(str[3]), Integer.parseInt(str[4]));
+//            specificBook.setHandedOut(hands);
+//            lib.specificBooks.add(specificBook);
+//        }
+//        else{
+//            System.out.println("Такой книги не существует.");
+//        }
+
     }
 }

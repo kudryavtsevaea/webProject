@@ -3,5 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/russian_nouns.txt" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/src/test/resources/inputBooks.txt" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/src/test/resources/inputSpecificBooks.txt" charset="windows-1251" />
   </component>
 </project>

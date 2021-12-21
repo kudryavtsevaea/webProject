@@ -1,60 +1,40 @@
 package com.netcracker.models;
 
-import org.apache.tapestry5.annotations.Id;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class Book {
+public class Book implements Comparable<Book>{
+    private int id;
     private String author;
     private String nameOfBook;
     private int yearOfPublishing;
     private int amountOfPages;
 
     public Book(String author, String nameOfBook, int yearOfPublishing, int amountOfPages) {
+        this.id = ThreadLocalRandom.current().nextInt(0, 100);
         this.author = author;
         this.nameOfBook = nameOfBook;
         this.yearOfPublishing = yearOfPublishing;
         this.amountOfPages = amountOfPages;
-    }
-
-    public String getAuthor() {
-        return author;
     }
 
     public String getNameOfBook() {
         return nameOfBook;
     }
 
-    public int getYearOfPublishing() {
-        return yearOfPublishing;
-    }
+    @Override
+    public String toString() {
+        return " {id = " + id + ", " +
+                "author = '" + author + '\'' +
+                ", nameOfBook = '" + nameOfBook + '\'' +
+                ", yearOfPublishing = " + yearOfPublishing +
+                ", amountOfPages = " + amountOfPages +
+                '}';
 
-    public int getAmountOfPages() {
-        return amountOfPages;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setNameOfBook(String nameOfBook) {
-        this.nameOfBook = nameOfBook;
-    }
-
-    public void setYearOfPublishing(int yearOfPublishing) {
-        this.yearOfPublishing = yearOfPublishing;
-    }
-
-    public void setAmountOfPages(int amountOfPages) {
-        this.amountOfPages = amountOfPages;
     }
 
     @Override
-    public String toString() {
-        return "Book{" +
-                "author='" + author + '\'' +
-                ", nameOfBook='" + nameOfBook + '\'' +
-                ", yearOfPublishing=" + yearOfPublishing +
-                ", amountOfPages=" + amountOfPages +
-                '}';
+    public int compareTo(Book o) {
+        return this.nameOfBook.compareTo(o.nameOfBook);
     }
 }
 
