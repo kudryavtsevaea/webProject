@@ -25,8 +25,8 @@ public class OperationsWithBooks {
             while(sc.hasNextLine()){
                 String s = sc.nextLine();
                 String[] str = s.split(";");
-                Book book = new Book(str[0], str[1], Integer.parseInt(str[2]),
-                        Integer.parseInt(str[3]));
+                Book book = new Book(Integer.parseInt(str[0]), str[1], str[2], Integer.parseInt(str[3]),
+                        Integer.parseInt(str[4]));
                 lib.books.add(book);
             }
         }
@@ -46,54 +46,22 @@ public class OperationsWithBooks {
         }
     }
 
-    public void deleteBook(String name){
-//        for (Book b: lib.books){
-//            if (b.getNameOfBook() == name){
-//                lib.books.remove(b);
-//            }
-//        }
-//        for (SpecificBook sb : lib.specificBooks){
-//            if (sb.getNameOfBook() == name){
-//                lib.specificBooks.remove(sb);
-//            }
-//        }
-//        // if (lib.books.contains(name)) {
-        //lib.books.remove(lib.books.stream().filter((b) -> b.equals(name)).findFirst().get());
-//            List<SpecificBook> deletable = lib.specificBooks.stream().filter((b) -> b.equals(name))
-//                    .collect(Collectors.toList());
-//            lib.specificBooks.removeAll(deletable);
-////        }
-////        else {
-////            System.out.println("Данной книги нет в библиотеке.");
-////        }
-       // for (Book b: lib.books)
-//        List<SpecificBook> deletable = lib.books.stream().filter((b) -> b.equals(name))
-//                    .collect(Collectors.toList());
-//            lib.specificBooks.removeAll(deletable);
+    public void deleteBook(String[] deletableBook){
+        Book delete = new Book(Long.getLong(deletableBook[0]), deletableBook[1], deletableBook[2],
+                Integer.parseInt(deletableBook[3]), Integer.parseInt(deletableBook[4]));
+        lib.books.remove(delete);
     }
 
     public void addBook(String[] book){
-        Book newBook = new Book(book[0], book[1], Integer.parseInt(book[2]),
-                Integer.parseInt(book[3]));
+        Book newBook = new Book(Integer.parseInt(book[0]), book[1], book[2], Integer.parseInt(book[3]),
+                Integer.parseInt(book[4]));
         lib.books.add(newBook);
     }
 
-    public void replaceBook(String str1, String[] str) {
-    //    if (lib.books.contains(str1)){
-       //     lib.books.remove(str1);
-//        String[] s = str1.split(";");
-//        for (Book b: lib.books) {
-//            if (b.getNameOfBook() == s[1]) {
-//                lib.books.remove(b);
-//                Book book = new Book(str[0], str[1], Integer.parseInt(str[2]),
-//                        Integer.parseInt(str[3]));
-//                lib.books.add(book);
-//            }
-//        }
-//        }
-//        else{
-//            System.out.println("Данной книги не существует.");
-//        }
-
+    public void correctBook(Book oldBook, String[] book){
+        lib.books.remove(oldBook);
+        Book newBook = new Book(Integer.parseInt(book[0]), book[1], book[2], Integer.parseInt(book[3]),
+                Integer.parseInt(book[4]));
+        lib.books.add(newBook);
     }
 }

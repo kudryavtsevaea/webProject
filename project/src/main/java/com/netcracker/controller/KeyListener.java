@@ -1,14 +1,19 @@
 package com.netcracker.controller;
 
+import com.netcracker.models.Book;
+import com.netcracker.models.Reader;
+import com.netcracker.view.Authentication;
 import com.netcracker.view.LibrarySystem;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 
 public class KeyListener {
-    private OperationsWithBooks operationsWithBooks;
-    private OperationsWithSpecificBooks operationsWithSpecificBooks;
+    private OperationsWithBooks operationsWithBooks = new OperationsWithBooks();
+    private OperationsWithReaders operationsWithReaders = new OperationsWithReaders();
+    private Transaction transaction= new Transaction();
 
+    private LibrarySystem lib = new LibrarySystem();
 
     private final String ONE = "1";
     private final String TWO = "2";
@@ -22,10 +27,11 @@ public class KeyListener {
     private final String TEN = "10";
     private final String ELEVEN = "11";
     private final String TWELVE = "12";
-    private final String THIRTEEN = "13";
-    private final String FOURTEEN = "14";
     private final String LEFT = "<";
     private final String QUIT = "q";
+
+    public KeyListener() throws SQLException {
+    }
 
     public void keyPressed(String e) throws SQLException {
         switch (e) {
@@ -33,119 +39,106 @@ public class KeyListener {
                 System.out.println("До свидания!");
                 System.exit(0);
                 break;
-            case "1":
+            case ONE:
                 //показать все выданные книги
-                operationsWithSpecificBooks.showAllBooksOnHands();
-                LibrarySystem.backToMenu();
+                transaction.showAllBooksOnHand();
+                lib.backToMenu();
                 break;
             case TWO:
-                //показать все экземпляры книг
-                operationsWithSpecificBooks.showAllSpecificBooks();
-                LibrarySystem.backToMenu();
+                //все книги в библиотеке
+                operationsWithBooks.showAllBooks();
+                lib.backToMenu();
                 break;
             case THREE:
-                //показать все книги
-                operationsWithBooks.showAllBooks();
-                LibrarySystem.backToMenu();
+                //взять книгу
+                System.out.print("Введите автора и название через точку с запятой: ");
+                Scanner sc = new Scanner(System.in);
+                transaction.getBook(sc.nextLine());
+                lib.backToMenu();
                 break;
             case FOUR:
-                //добавить экземпляр книги
-                System.out.println("Введите поля экземпляра книги, который хотите добавить" +
-                        ", через точку с запятой.");
-                Scanner sc = new Scanner(System.in);
-                String[] s = sc.nextLine().split(";");
-                operationsWithSpecificBooks.addSpecificBook(s);
-                LibrarySystem.backToMenu();
+                //вернуть книгу
+                System.out.print("Введите инвентарный номер: ");
+                sc = new Scanner(System.in);
+                transaction.returnBook(sc.nextLong());
+                lib.backToMenu();
                 break;
             case FIVE:
-                //добавить книгу
-                System.out.println("Введите поля книги, которую хотите добавить, через точку с запятой.");
-                sc = new Scanner(System.in);
-                String[] s2 = sc.nextLine().split(";");
-                operationsWithBooks.addBook(s2);
-                LibrarySystem.backToMenu();
-                break;
-            case SIX:
-                //взять книгу (изменить onHands на true)
-                System.out.println("Введите название книги.");
-                sc = new Scanner(System.in);
-                String name = sc.nextLine();
-                operationsWithSpecificBooks.getBook(name);
-                LibrarySystem.backToMenu();
-                break;
-            case SEVEN:
-                //вернуть книгу (изменить onHands на false)
-                System.out.println("Введите инвентарный номер.");
-                sc = new Scanner(System.in);
-                int inventoryNumber = sc.nextInt();
-                operationsWithSpecificBooks.putBook(inventoryNumber);
-                LibrarySystem.backToMenu();
-                break;
-            case EIGHT:
-                //добавить из файла список экземпляров
-                System.out.println("Введите путь к файлу.");
-                sc = new Scanner(System.in);
-                String path = sc.nextLine();
-                operationsWithSpecificBooks.addListOfSpecificBook(path);
-                LibrarySystem.backToMenu();
-                break;
-            case NINE:
-                //добавить из файла список книг
-                System.out.println("Введите путь к файлу со списком книг, которые хотите добавить.");
-                sc = new Scanner(System.in);
-                path = sc.nextLine();
-                operationsWithBooks.addListOfBooks(path);
-                LibrarySystem.backToMenu();
-                break;
-            case TEN:
-                //удалить книгу
-                System.out.println("Введите название книги, которую хотите удалить.");
-                sc = new Scanner(System.in);
-                name = sc.nextLine();
-                operationsWithBooks.deleteBook(name);
-                LibrarySystem.backToMenu();
-                break;
-            case ELEVEN:
-                //удалить экземпляр книги
-                System.out.println("Введите инвентарный номер книги, которую хотите удалить.");
-                sc = new Scanner(System.in);
-                inventoryNumber = sc.nextInt();
-                operationsWithSpecificBooks.deleteSpecificBook(inventoryNumber);
-                LibrarySystem.backToMenu();
-                break;
-            case TWELVE:
-                //найти по регулярному выражению
-                System.out.println("Введите шаблон для поиска.");
+                //регулярное выражение
+                System.out.print("Введите регулярное выражение для поиска: ");
                 sc = new Scanner(System.in);
                 String regex = sc.nextLine();
                 operationsWithBooks.searchByRegex(regex);
-                LibrarySystem.backToMenu();
+                lib.backToMenu();
                 break;
-            case THIRTEEN:
-                //изменить поля книги
-                System.out.println("Введите название книги, которую хотите отредактировать.");
+            case SIX:
+                //добавить книгу
+                System.out.print("Введите информацию через точку с запятой: ");
                 sc = new Scanner(System.in);
-                String str1 = sc.nextLine();
-                System.out.println("Введите новые значения полей книги через точку с запятой.");
-                sc = new Scanner(System.in);
-                String[] str2 = sc.nextLine().split(";");
-                operationsWithBooks.replaceBook(str1, str2);
-                LibrarySystem.backToMenu();
+                String[] book = sc.nextLine().split(";");
+                operationsWithBooks.addBook(book);
+                lib.backToMenu();
                 break;
-            case FOURTEEN:
-                //изменить поля экземпляра
-                System.out.println("Введите инвентарный номер книги, которую хотите отредактировать.");
+            case SEVEN:
+                //добавить из файла
+                System.out.print("Введите путь к файлу: ");
                 sc = new Scanner(System.in);
-                inventoryNumber = sc.nextInt();
-                System.out.println("Введите новые значения полей экземпляра книги через точку с запятой.");
+                operationsWithBooks.addListOfBooks(sc.nextLine());
+                lib.backToMenu();
+                break;
+            case EIGHT:
+                //удалить книгу
+                System.out.print("Введите информацию через точку с запятой: ");
                 sc = new Scanner(System.in);
-                String[] str3 = sc.nextLine().split(";");
-                operationsWithSpecificBooks.replaceSpecificBook(inventoryNumber, str3);
-                LibrarySystem.backToMenu();
+                String[] deletableBook = sc.nextLine().split(";");
+                operationsWithBooks.deleteBook(deletableBook);
+                lib.backToMenu();
+                break;
+            case NINE:
+                //добавить пользователя
+                System.out.print("Введите имя добавляемого пользователя: ");
+                sc = new Scanner(System.in);
+                String userName = sc.nextLine();
+                operationsWithReaders.addReader(userName);
+                lib.backToMenu();
+                break;
+            case TEN:
+                //удалить пользователя
+                System.out.print("Введите имя удаляемого пользователя: ");
+                sc = new Scanner(System.in);
+                String deletableUser = sc.nextLine();
+                operationsWithReaders.deleteReader(deletableUser);
+                lib.backToMenu();
+                break;
+            case ELEVEN:
+                //редактировать пользователя
+                System.out.print("Введите имя редактируемого пользователя: ");
+                sc = new Scanner(System.in);
+                Reader oldReader = new Reader(sc.nextLine());
+                sc = new Scanner("Введите измененные данные");
+                operationsWithReaders.correctReader(oldReader, sc.nextLine());
+                lib.backToMenu();
+                break;
+            case TWELVE:
+                //редактировать книгу
+                System.out.print("Введите строку которую хотите изменить: ");
+                sc = new Scanner(System.in);
+                String[] oldBookArray = sc.nextLine().split(";");
+                Book oldBook = new Book(Integer.parseInt(oldBookArray[0]), oldBookArray[1], oldBookArray[2],
+                        Integer.parseInt(oldBookArray[3]), Integer.parseInt(oldBookArray[4]));
+                System.out.print("Введите новую строку: ");
+                sc = new Scanner(System.in);
+                operationsWithBooks.correctBook(oldBook, sc.nextLine().split(";"));
+                lib.backToMenu();
                 break;
             case LEFT:
                 //переход в меню
-                LibrarySystem.printMenu();
+                if (Authentication.isAdmin() == true){
+                    lib.printMenuAdmin();
+                }
+                else {
+                    lib.printMenuUser();
+                }
                 break;
             default:
                 System.out.println("Некорректная операция! Попробуйте снова.");

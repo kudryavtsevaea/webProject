@@ -1,40 +1,41 @@
 package com.netcracker.models;
 
-import java.util.concurrent.ThreadLocalRandom;
+import lombok.Data;
+import lombok.ToString;
 
+@Data
+@ToString
 public class Book implements Comparable<Book>{
-    private int id;
+    private long id;
     private String author;
-    private String nameOfBook;
+    private String bookName;
     private int yearOfPublishing;
     private int amountOfPages;
+    private boolean isHandedOut;
 
-    public Book(String author, String nameOfBook, int yearOfPublishing, int amountOfPages) {
-        this.id = ThreadLocalRandom.current().nextInt(0, 100);
+    public Book(long id, String author, String nameOfBook, int yearOfPublishing, int amountOfPages) {
+        this.id = id;
         this.author = author;
-        this.nameOfBook = nameOfBook;
+        this.bookName = nameOfBook;
         this.yearOfPublishing = yearOfPublishing;
         this.amountOfPages = amountOfPages;
+        this.isHandedOut = false;
     }
 
     public String getNameOfBook() {
-        return nameOfBook;
-    }
-
-    @Override
-    public String toString() {
-        return " {id = " + id + ", " +
-                "author = '" + author + '\'' +
-                ", nameOfBook = '" + nameOfBook + '\'' +
-                ", yearOfPublishing = " + yearOfPublishing +
-                ", amountOfPages = " + amountOfPages +
-                '}';
-
+        return bookName;
     }
 
     @Override
     public int compareTo(Book o) {
-        return this.nameOfBook.compareTo(o.nameOfBook);
+
+        int result = this.bookName.compareTo(o.bookName);
+
+        if (result == 0) {
+            result = this.author.compareTo(o.author);
+        }
+
+        return result;
     }
 }
 
