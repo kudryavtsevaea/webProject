@@ -49,7 +49,15 @@ create table library (
 	FOREIGN KEY(book_inventory_number) REFERENCES book(inventory_number)
 );
 
+
 create view book_turnover_with_info as
 select book_turnover.reader_id, book.inventory_number, book.author, book.book_name,
-book.year_of_publishing, book.amount_of_pages, date_of_getting 
+book.year_of_publishing, book.amount_of_pages, date_of_getting, book.is_handed_out
 from book inner join book_turnover on book.inventory_number = book_turnover.inventory_number;
+
+create view book_turnover_with_info2 as
+select reader.readerName, book_turnover_with_info.inventory_number, book_turnover_with_info.author, 
+book_turnover_with_info.book_name, book_turnover_with_info.year_of_publishing, 
+book_turnover_with_info.amount_of_pages, book_turnover_with_info.date_of_getting,  
+book_turnover_with_info.is_handed_out
+from reader inner join  book_turnover_with_info on  book_turnover_with_info.reader_id = reader.id
