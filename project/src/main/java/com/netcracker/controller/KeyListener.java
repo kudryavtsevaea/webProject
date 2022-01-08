@@ -12,6 +12,7 @@ public class KeyListener {
     private OperationsWithBooks operationsWithBooks = new OperationsWithBooks();
     private OperationsWithReaders operationsWithReaders = new OperationsWithReaders();
     private Transaction transaction= new Transaction();
+    private Authentication authentication = new Authentication();
 
     private LibrarySystem lib = new LibrarySystem();
 
@@ -133,12 +134,7 @@ public class KeyListener {
                 break;
             case LEFT:
                 //переход в меню
-                if (Authentication.isAdmin() == true){
-                    lib.printMenuAdmin();
-                }
-                else {
-                    lib.printMenuUser();
-                }
+                authentication.printMenu();
                 break;
             default:
                 System.out.println("Некорректная операция! Попробуйте снова.");

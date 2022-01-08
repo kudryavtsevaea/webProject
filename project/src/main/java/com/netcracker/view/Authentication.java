@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Authentication {
-    private static boolean admin = false;
+    private boolean admin = false;
     private Library lib = Library.getInstance();
     private final LibrarySystem libsys = new LibrarySystem();
 
@@ -18,8 +18,13 @@ public class Authentication {
         nameCheck(name);
     }
 
-    public static boolean isAdmin() {
-        return admin;
+    public void printMenu(){
+        if (admin == true){
+            libsys.printMenuAdmin();
+        }
+        else {
+            libsys.printMenuUser();
+        }
     }
 
     public void nameCheck(String name){
@@ -28,6 +33,7 @@ public class Authentication {
             admin = true;
             lib.currentReader.setId(0);
             lib.currentReader.setName("admin");
+            libsys.printMenuAdmin();
             flag = true;
         }
         for (Reader r : lib.readers) {

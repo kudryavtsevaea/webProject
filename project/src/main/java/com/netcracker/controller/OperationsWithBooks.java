@@ -5,6 +5,7 @@ import com.netcracker.models.Library;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -17,7 +18,12 @@ public class OperationsWithBooks {
     }
 
     public void showAllBooks() {
-        lib.books.forEach(System.out::println);
+        if (lib.books.isEmpty()){
+            System.out.println("Извините, в библиотеке нет книг.");
+        }
+        else {
+            lib.books.forEach(System.out::println);
+        }
     }
 
     public void addListOfBooks(String path){
@@ -30,38 +36,66 @@ public class OperationsWithBooks {
                 lib.books.add(book);
             }
         }
-        catch(FileNotFoundException e){
+        catch(FileNotFoundException e2){
             System.out.println("Файл не найден.");
+        }
+        catch(IOException e1){
+            System.out.println("Введена некорректная информация!");
         }
     }
 
     public void searchByRegex(String requiredString){
-        Pattern pattern = Pattern.compile(requiredString, Pattern.CASE_INSENSITIVE);
-        for (Book w : lib.books) {
-            Matcher matcher = pattern.matcher(w.getNameOfBook());
-            if (matcher.find()) {
-                System.out.println(w);
-            }
-
-        }
+       try {
+           Pattern pattern = Pattern.compile(requiredString, Pattern.CASE_INSENSITIVE);
+           boolean flag = false;
+           for (Book w : lib.books) {
+               Matcher matcher = pattern.matcher(w.getNameOfBook());
+               if (matcher.find()) {
+                   System.out.println(w);
+                   flag = true;
+               }
+           }
+           if (!flag) {
+               System.out.println("Нет подходящих книг!");
+           }
+       }
+       catch (IllegalArgumentException e){
+           System.out.println("Некорректно введено регулярное выражение.");
+       }
     }
 
     public void deleteBook(String[] deletableBook){
-        Book delete = new Book(Long.getLong(deletableBook[0]), deletableBook[1], deletableBook[2],
-                Integer.parseInt(deletableBook[3]), Integer.parseInt(deletableBook[4]));
-        lib.books.remove(delete);
+       try {
+           Book delete = new Book(Long.getLong(deletableBook[0]), deletableBook[1], deletableBook[2],
+                   Integer.parseInt(deletableBook[3]), Integer.parseInt(deletableBook[4]));
+           lib.books.remove(delete);
+       }
+       catch (IllegalArgumentException e){
+           System.out.println("Данной книги не существует.");
+       }
     }
 
     public void addBook(String[] book){
-        Book newBook = new Book(Integer.parseInt(book[0]), book[1], book[2], Integer.parseInt(book[3]),
+        try {
+            Book newBook = new Book(Integer.parseInt(book[0]), book[1], book[2], Integer.parseInt(book[3]),
                 Integer.parseInt(book[4]));
         lib.books.add(newBook);
+        }
+        catch(IllegalArgumentException e){
+            System.out.println("Неверный формат ввода!");
+        }
+
     }
 
     public void correctBook(Book oldBook, String[] book){
-        lib.books.remove(oldBook);
-        Book newBook = new Book(Integer.parseInt(book[0]), book[1], book[2], Integer.parseInt(book[3]),
+        try {
+            lib.books.remove(oldBook);
+            Book newBook = new Book(Integer.parseInt(book[0]), book[1], book[2], Integer.parseInt(book[3]),
                 Integer.parseInt(book[4]));
-        lib.books.add(newBook);
+            lib.books.add(newBook);
+        }
+        catch(IllegalArgumentException e){
+            System.out.println("Неверный формат ввода!");
+        }
     }
 }

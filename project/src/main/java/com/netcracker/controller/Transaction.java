@@ -4,6 +4,9 @@ import com.netcracker.models.Library;
 import com.netcracker.models.Turnover;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class Transaction {
@@ -13,9 +16,18 @@ public class Transaction {
     }
 
     public void showAllBooksOnHand() {
-        lib.turnovers.stream().filter(b -> b.getBook().isHandedOut() == true &&
-                b.getReader().getName().equals(lib.currentReader))
-                .collect(Collectors.toList()).forEach(System.out::println);
+        List<Turnover> turnoverArray= new ArrayList<>();
+        turnoverArray =
+            lib.turnovers.stream().filter(b -> b.getBook().isHandedOut() == true &&
+                            b.getReader().getName().equals(lib.currentReader))
+                    .collect(Collectors.toList());
+        if (!turnoverArray.isEmpty()){
+            turnoverArray.forEach(System.out::println);
+        }
+        else {
+            System.out.println("Вы не взяли ни одну книгу!");
+        }
+
     }
 
     public void getBook(String info){
