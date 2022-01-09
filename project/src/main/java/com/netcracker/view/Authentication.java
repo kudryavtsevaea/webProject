@@ -2,7 +2,6 @@ package com.netcracker.view;
 
 import com.netcracker.models.Library;
 import com.netcracker.models.Reader;
-
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -27,7 +26,7 @@ public class Authentication {
         }
     }
 
-    public void nameCheck(String name){
+    public void nameCheck(String name) throws SQLException {
         boolean flag = false;
         if (name == "admin"){
             admin = true;
@@ -47,7 +46,7 @@ public class Authentication {
         }
         if (flag){
             System.out.println("Данного пользователя не существует. Зарегистрируйтесь.");
-            lib.readers.add(new Reader(lib.readers.size() + 1, name));
+            lib.readers.add(new Reader(name));
             lib.currentReader.setId(lib.readers.size());
             lib.currentReader.setName(name);
         }

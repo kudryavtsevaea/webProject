@@ -7,7 +7,7 @@ public class Library {
 
     public Set<Book> books = new TreeSet<>();
     public Set<Reader> readers = new TreeSet<>();
-    public Reader currentReader = new Reader();
+    public Reader currentReader;
     public List<Turnover> turnovers = new ArrayList<>();
     private static Library INSTANCE = null;
     private Connection connection = DriverManager.getConnection
@@ -25,7 +25,7 @@ public class Library {
         PreparedStatement preparedStatement2 = connection.prepareStatement("select * from reader");
         ResultSet resultSet2 = preparedStatement2.executeQuery();
         while (resultSet2.next()) {
-            readers.add(new Reader(resultSet2.getInt(1), resultSet2.getString(2)));
+            readers.add(new Reader(resultSet2.getString(2)));
         }
 
         PreparedStatement preparedStatement3 = connection.prepareStatement(
@@ -51,5 +51,9 @@ public class Library {
             }
         }
         return INSTANCE;
+    }
+
+    public Connection getConnection(){
+        return connection;
     }
 }

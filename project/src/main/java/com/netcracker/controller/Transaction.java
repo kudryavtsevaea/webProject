@@ -16,7 +16,7 @@ public class Transaction {
     }
 
     public void showAllBooksOnHand() {
-        List<Turnover> turnoverArray= new ArrayList<>();
+        List<Turnover> turnoverArray;
         turnoverArray =
             lib.turnovers.stream().filter(b -> b.getBook().isHandedOut() == true &&
                             b.getReader().getName().equals(lib.currentReader))
