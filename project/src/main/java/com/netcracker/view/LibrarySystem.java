@@ -2,7 +2,7 @@ package com.netcracker.view;
 
 public class LibrarySystem{
 
-    public static void printMenuAdmin(){
+    public static void printMenu(){
         System.out.println(
                 "Для Вас доступны следующие операции:\n"+
                 "1.  Просмотреть все выданные книги;\n" +
@@ -16,18 +16,6 @@ public class LibrarySystem{
                 "9.  Добавить пользователя;\n" +
                 "10. Удалить пользователя;\n" +
                 "11. Редактировать имя пользователя;\n" +
-                "q.  Выход.\n");
-        System.out.print("Выберете операцию : ");
-    }
-
-    public static void printMenuUser(){
-        System.out.println(
-                "Для Вас доступны следующие операции:\n"+
-                "1.  Просмотреть все выданные книги;\n" +
-                "2.  Просмотреть все книги в библиотеке;\n" +
-                "3.  Взять книгу;\n" +
-                "4.  Вернуть книгу;\n" +
-                "5.  Найти книгу по регулярному выражению;\n" +
                 "q.  Выход.\n");
         System.out.print("Выберете операцию : ");
     }

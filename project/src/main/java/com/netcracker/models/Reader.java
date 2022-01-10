@@ -1,5 +1,6 @@
 package com.netcracker.models;
 
+import com.netcracker.services.DataManagerService;
 import lombok.Data;
 import lombok.ToString;
 import java.sql.CallableStatement;
@@ -10,11 +11,11 @@ import java.sql.SQLException;
 public class Reader implements Comparable<Reader>{
     private int id;
     private String name;
-    private Library lib = Library.getInstance();
 
     public Reader(String name) throws SQLException {
         this.name = name;
-        CallableStatement  stmt = lib.getConnection().prepareCall("{insert into reader (readerName) values (?)}");
+        CallableStatement  stmt = DataManagerService.getConnection().
+                prepareCall("insert into reader (readerName) values (?)");
         stmt.setString(2,name);
         stmt.executeUpdate();
     }

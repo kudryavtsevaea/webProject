@@ -1,10 +1,10 @@
 import com.netcracker.controller.KeyListener;
 import com.netcracker.view.Authentication;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class App extends SpringBootServletInitializer {
+public class App{
     public static void main(String[] args) throws SQLException {
         KeyListener keyListeners = new KeyListener();
         Scanner sc = new Scanner(System.in);

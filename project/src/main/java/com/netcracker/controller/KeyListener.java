@@ -2,6 +2,7 @@ package com.netcracker.controller;
 
 import com.netcracker.models.Book;
 import com.netcracker.models.Reader;
+import com.netcracker.services.PrepOperations;
 import com.netcracker.view.Authentication;
 import com.netcracker.view.LibrarySystem;
 
@@ -9,12 +10,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class KeyListener {
-    private OperationsWithBooks operationsWithBooks = new OperationsWithBooks();
-    private OperationsWithReaders operationsWithReaders = new OperationsWithReaders();
-    private Transaction transaction= new Transaction();
-    private Authentication authentication = new Authentication();
-
-    private LibrarySystem lib = new LibrarySystem();
+   private PrepOperations prepOperations = new PrepOperations();
 
     private final String ONE = "1";
     private final String TWO = "2";
@@ -42,74 +38,74 @@ public class KeyListener {
                 break;
             case ONE:
                 //показать все выданные книги
-                transaction.showAllBooksOnHand();
-                lib.backToMenu();
+                prepOperations.getTransaction().showAllBooksOnHand();
+                prepOperations.getLib().backToMenu();
                 break;
             case TWO:
                 //все книги в библиотеке
-                operationsWithBooks.showAllBooks();
-                lib.backToMenu();
+                prepOperations.getOperationsWithBooks().showAllBooks();
+                prepOperations.getLib().backToMenu();
                 break;
             case THREE:
                 //взять книгу
                 System.out.print("Введите автора и название через точку с запятой: ");
                 Scanner sc = new Scanner(System.in);
-                transaction.getBook(sc.nextLine());
-                lib.backToMenu();
+                prepOperations.getTransaction().getBook(sc.nextLine());
+                prepOperations.getLib().backToMenu();
                 break;
             case FOUR:
                 //вернуть книгу
                 System.out.print("Введите инвентарный номер: ");
                 sc = new Scanner(System.in);
-                transaction.returnBook(sc.nextLong());
-                lib.backToMenu();
+                prepOperations.getTransaction().returnBook(sc.nextLong());
+                prepOperations.getLib().backToMenu();
                 break;
             case FIVE:
                 //регулярное выражение
                 System.out.print("Введите регулярное выражение для поиска: ");
                 sc = new Scanner(System.in);
                 String regex = sc.nextLine();
-                operationsWithBooks.searchByRegex(regex);
-                lib.backToMenu();
+                prepOperations.getOperationsWithBooks().searchByRegex(regex);
+                prepOperations.getLib().backToMenu();
                 break;
             case SIX:
                 //добавить книгу
                 System.out.print("Введите информацию через точку с запятой: ");
                 sc = new Scanner(System.in);
                 String[] book = sc.nextLine().split(";");
-                operationsWithBooks.addBook(book);
-                lib.backToMenu();
+                prepOperations.getOperationsWithBooks().addBook(book);
+                prepOperations.getLib().backToMenu();
                 break;
             case SEVEN:
                 //добавить из файла
                 System.out.print("Введите путь к файлу: ");
                 sc = new Scanner(System.in);
-                operationsWithBooks.addListOfBooks(sc.nextLine());
-                lib.backToMenu();
+                prepOperations.getOperationsWithBooks().addListOfBooks(sc.nextLine());
+                prepOperations.getLib().backToMenu();
                 break;
             case EIGHT:
                 //удалить книгу
                 System.out.print("Введите информацию через точку с запятой: ");
                 sc = new Scanner(System.in);
                 String[] deletableBook = sc.nextLine().split(";");
-                operationsWithBooks.deleteBook(deletableBook);
-                lib.backToMenu();
+                prepOperations.getOperationsWithBooks().deleteBook(deletableBook);
+                prepOperations.getLib().backToMenu();
                 break;
             case NINE:
                 //добавить пользователя
                 System.out.print("Введите имя добавляемого пользователя: ");
                 sc = new Scanner(System.in);
                 String userName = sc.nextLine();
-                operationsWithReaders.addReader(userName);
-                lib.backToMenu();
+                prepOperations.getOperationsWithReaders().addReader(userName);
+                prepOperations.getLib().backToMenu();
                 break;
             case TEN:
                 //удалить пользователя
                 System.out.print("Введите имя удаляемого пользователя: ");
                 sc = new Scanner(System.in);
                 String deletableUser = sc.nextLine();
-                operationsWithReaders.deleteReader(deletableUser);
-                lib.backToMenu();
+               prepOperations.getOperationsWithReaders().deleteReader(deletableUser);
+                prepOperations.getLib().backToMenu();
                 break;
             case ELEVEN:
                 //редактировать пользователя
@@ -117,8 +113,8 @@ public class KeyListener {
                 sc = new Scanner(System.in);
                 Reader oldReader = new Reader(sc.nextLine());
                 sc = new Scanner("Введите измененные данные");
-                operationsWithReaders.correctReader(oldReader, sc.nextLine());
-                lib.backToMenu();
+                prepOperations.getOperationsWithReaders().correctReader(oldReader, sc.nextLine());
+                prepOperations.getLib().backToMenu();
                 break;
             case TWELVE:
                 //редактировать книгу
@@ -129,12 +125,12 @@ public class KeyListener {
                         Integer.parseInt(oldBookArray[3]), Integer.parseInt(oldBookArray[4]));
                 System.out.print("Введите новую строку: ");
                 sc = new Scanner(System.in);
-                operationsWithBooks.correctBook(oldBook, sc.nextLine().split(";"));
-                lib.backToMenu();
+                prepOperations.getOperationsWithBooks().correctBook(oldBook, sc.nextLine().split(";"));
+                prepOperations.getLib().backToMenu();
                 break;
             case LEFT:
                 //переход в меню
-                authentication.printMenu();
+                prepOperations.getLib().backToMenu();
                 break;
             default:
                 System.out.println("Некорректная операция! Попробуйте снова.");

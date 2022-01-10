@@ -1,46 +1,27 @@
 package com.netcracker.controller;
 
-import com.netcracker.models.Library;
+import com.netcracker.dao.TurnoversDao;
+import com.netcracker.dao.TurnoversDaoImpl;
 import com.netcracker.models.Turnover;
+import lombok.NoArgsConstructor;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor
 public class Transaction {
-    private Library lib = Library.getInstance();
 
-    public Transaction() throws SQLException {
-    }
+    TurnoversDao turnoversDao = new TurnoversDaoImpl();
 
     public void showAllBooksOnHand() {
-        List<Turnover> turnoverArray;
-        turnoverArray =
-            lib.turnovers.stream().filter(b -> b.getBook().isHandedOut() == true &&
-                            b.getReader().getName().equals(lib.currentReader))
-                    .collect(Collectors.toList());
-        if (!turnoverArray.isEmpty()){
-            turnoverArray.forEach(System.out::println);
-        }
-        else {
-            System.out.println("Вы не взяли ни одну книгу!");
-        }
-
+        turnoversDao.getAllBooksOnHnd().forEach(System.out::println);
     }
 
     public void getBook(String info){
-        String[] infoBook = info.split(";");
-        Turnover turnover = lib.turnovers.stream().filter(b -> b.getBook().isHandedOut() == false &&
-                b.getBook().getBookName().equals(infoBook[1]) && b.getBook().getAuthor().equals(infoBook[0]))
-                .findFirst().get();
-        lib.books.stream().filter(b -> b.equals(turnover.getBook())).findFirst().get().setHandedOut(true);
+        turnoversDao.getBook(info);
     }
 
     public void returnBook(long number){
-        Turnover turnover = lib.turnovers.stream().filter(b -> b.getBook().getId() == number)
-                .findFirst().get();
-        lib.books.stream().filter(b -> b.equals(turnover.getBook())).findFirst().get().setHandedOut(false);
+        turnoversDao.returnBook(number);
     }
 }

@@ -1,54 +1,29 @@
 package com.netcracker.view;
 
-import com.netcracker.models.Library;
 import com.netcracker.models.Reader;
+import com.netcracker.services.PrepLibrary;
+
 import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Authentication {
-    private boolean admin = false;
-    private Library lib = Library.getInstance();
-    private final LibrarySystem libsys = new LibrarySystem();
+
+    private PrepLibrary preplyb = new PrepLibrary();
 
     public Authentication() throws SQLException {
-        libsys.authentication();
+        System.out.print("Добро пожаловать в библиотеку!\nАвторизуйтесь:");
         Scanner sc = new Scanner(System.in);
-        String name = sc.nextLine();
-        nameCheck(name);
-    }
-
-    public void printMenu(){
-        if (admin == true){
-            libsys.printMenuAdmin();
-        }
-        else {
-            libsys.printMenuUser();
-        }
+        nameCheck(sc.nextLine());
+        preplyb.getLibsys().printMenu();
     }
 
     public void nameCheck(String name) throws SQLException {
-        boolean flag = false;
-        if (name == "admin"){
-            admin = true;
-            lib.currentReader.setId(0);
-            lib.currentReader.setName("admin");
-            libsys.printMenuAdmin();
-            flag = true;
-        }
-        for (Reader r : lib.readers) {
-            if (r.getName() == name){
-                lib.currentReader.setId(r.getId());
-                lib.currentReader.setName(name);
-                libsys.printMenuUser();
-                flag = true;
+        for (Reader r : preplyb.getReadersDao().getAllReaders()) {
+            if (r.getName() == name) {
+                preplyb.getLib().currentReader.setName(name);
+                preplyb.getLibsys().printMenu();
                 break;
             }
-        }
-        if (flag){
-            System.out.println("Данного пользователя не существует. Зарегистрируйтесь.");
-            lib.readers.add(new Reader(name));
-            lib.currentReader.setId(lib.readers.size());
-            lib.currentReader.setName(name);
         }
     }
 }
