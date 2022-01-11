@@ -75,27 +75,6 @@
             <version>${tapestry-version}</version>
             <scope>compile</scope>
         </dependency>
-        <!-- Uncomment this to add support for hibernate, bean validation and file uploads -->
-        <!--
-        <dependency>
-            <groupId>org.apache.tapestry</groupId>
-            <artifactId>tapestry-hibernate</artifactId>
-            <version>${tapestry-version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tapestry</groupId>
-            <artifactId>tapestry-beanvalidator</artifactId>
-            <version>${tapestry-version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tapestry</groupId>
-            <artifactId>tapestry-upload</artifactId>
-            <version>${tapestry-version}</version>
-            <scope>compile</scope>
-        </dependency>
-        -->
         <!-- Unit Testing -->
         <dependency>
             <groupId>org.apache.tapestry</groupId>
@@ -218,6 +197,14 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-		</plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
 	</build>
 </project>

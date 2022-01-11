@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface BooksDao {
     List<Book> getAllBooks();
-    Book getBookById(long id);
     List<Book> getBookByRegex(String reg);
     boolean addBook(Book book);
     boolean deleteBook(Book book);

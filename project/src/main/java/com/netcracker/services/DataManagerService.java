@@ -1,5 +1,8 @@
 package com.netcracker.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -10,6 +13,7 @@ import java.util.Properties;
 public class DataManagerService {
 
     private static DataManagerService INSTANCE = null;
+    private static final Logger log = LoggerFactory.getLogger(DataManagerService.class);
 
     private DataManagerService(){
 
@@ -23,17 +27,16 @@ public class DataManagerService {
     }
 
     public static Connection getConnection(){
-        FileInputStream fis;
         Properties property = new Properties();
-        try {
-            fis = new FileInputStream("src/prop/config.properties");
+        try(FileInputStream fis = new FileInputStream("src/prop/config.properties")){
             property.load(fis);
            return DriverManager.getConnection
                     (property.getProperty("db.host"), property.getProperty("db.login"),
                             property.getProperty("db.password"));
         }
         catch(SQLException | IOException e){
-            System.out.println("Не удалось подключиться к базе данных.");
+            log.error("Propery-файл не найден.");
+            log.error("Не удалось подключиться к базе данных.");
         }
         return null;
     }

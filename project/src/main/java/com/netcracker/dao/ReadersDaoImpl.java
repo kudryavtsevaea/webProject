@@ -2,6 +2,8 @@ package com.netcracker.dao;
 
 import com.netcracker.models.Reader;
 import com.netcracker.services.DataManagerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReadersDaoImpl implements  ReadersDao{
+    private static final Logger log = LoggerFactory.getLogger(ReadersDaoImpl.class);
 
     @Override
     public List<Reader> getAllReaders() {
@@ -24,7 +27,7 @@ public class ReadersDaoImpl implements  ReadersDao{
             }
         }
         catch(SQLException e){
-            System.out.println("Ошибка при загрузке пользователей.");
+            log.error("Ошибка при загрузке пользователей в классе ReadersDaoImpl.");
         }
         return readers;
     }
@@ -39,7 +42,7 @@ public class ReadersDaoImpl implements  ReadersDao{
             stmt.executeUpdate();
         }
         catch (SQLException e){
-            System.out.println("Ошибка добавления пользователя.");
+            log.error("Ошибка добавления пользователя в классе ReadersDaoImpl.");
         }
         return false;
     }
@@ -56,7 +59,7 @@ public class ReadersDaoImpl implements  ReadersDao{
                     stmt.executeUpdate();
                 }
                 catch (SQLException e){
-                    System.out.println("Ошибка при удалении пользователя.");
+                    log.error("Ошибка при удалении пользователя в классе ReadersDaoImpl.");
                 }
                 return true;
             }
@@ -74,7 +77,7 @@ public class ReadersDaoImpl implements  ReadersDao{
             stmt.executeUpdate();
         }
         catch (SQLException e){
-            System.out.println("Ошибка при редактировании пользователя.");
+            log.error("Ошибка при редактировании пользователя в классе ReadersDaoImpl.");
         }
         return false;
     }

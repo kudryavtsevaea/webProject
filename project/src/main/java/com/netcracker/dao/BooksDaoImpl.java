@@ -2,6 +2,8 @@ package com.netcracker.dao;
 
 import com.netcracker.models.Book;
 import com.netcracker.services.DataManagerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,6 +19,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BooksDaoImpl implements BooksDao{
+    private static final Logger log = LoggerFactory.getLogger(BooksDaoImpl.class);
+
     @Override
     public List<Book> getAllBooks() {
         List<Book> books = new ArrayList<>();
@@ -31,20 +35,9 @@ public class BooksDaoImpl implements BooksDao{
             }
         }
         catch(SQLException e){
-            System.out.println("Ошибка при загрузке книг.");
+            log.error("Ошибка при загрузке книг в классе BooksDaoImpl.");
         }
         return books;
-    }
-
-    @Override
-    public Book getBookById(long id) {
-        List<Book> books = getAllBooks();
-        for (Book b : books) {
-            if (b.getId() == id){
-                return b;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -61,10 +54,12 @@ public class BooksDaoImpl implements BooksDao{
                 }
             }
             if (!flag) {
+                log.info("Не найдено подходящих книг.");
                 System.out.println("Нет подходящих книг.");
             }
         }
         catch (IllegalArgumentException e){
+            log.info("Некорректно введено регулярное выражение.");
             System.out.println("Некорректно введено регулярное выражение.");
         }
         return books;
@@ -87,7 +82,7 @@ public class BooksDaoImpl implements BooksDao{
             return true;
         }
         catch (SQLException e){
-            System.out.println("Ошибка добавления книги.");
+            log.error("Ошибка добавления книги в классе BooksDaoImpl.");
         }
         return false;
     }
@@ -102,7 +97,7 @@ public class BooksDaoImpl implements BooksDao{
                     stmt.setString(1, b.getBookName());
                     stmt.executeUpdate();
                 } catch (SQLException e) {
-                    System.out.println("Ошибка при удалении книги.");
+                    log.error("Ошибка при удалении книги в классе BooksDaoImpl.");
                 }
                 return true;
             }
@@ -124,10 +119,12 @@ public class BooksDaoImpl implements BooksDao{
             }
         }
         catch(FileNotFoundException e2){
+            log.info("Файл не найден.");
             System.out.println("Файл не найден.");
         }
         catch(IOException e1){
-            System.out.println("Введена некорректная информация!");
+            log.info("Заданный путь не верный.");
+            System.out.println("Введена некорректная информация.");
         }
         return books;
     }
@@ -143,7 +140,7 @@ public class BooksDaoImpl implements BooksDao{
             return true;
         }
         catch (SQLException e){
-            System.out.println("Ошибка при редактировании книги.");
+            log.error("Ошибка при редактировании книги в классе BooksDaoImpl.");
         }
         return false;
     }

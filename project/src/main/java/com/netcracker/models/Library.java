@@ -1,7 +1,5 @@
 package com.netcracker.models;
 
-import java.sql.*;
-
 public class Library {
 
     private static Library INSTANCE = null;
@@ -12,7 +10,7 @@ public class Library {
 
     }
 
-    public static Library getInstance() throws SQLException {
+    public static Library getInstance(){
         if (INSTANCE == null) {
             synchronized (Library.class) {
                 if (INSTANCE == null) {
@@ -21,9 +19,5 @@ public class Library {
             }
         }
         return INSTANCE;
-    }
-
-    public Reader getCurrentReader() {
-        return currentReader;
     }
 }

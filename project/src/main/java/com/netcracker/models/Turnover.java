@@ -12,12 +12,4 @@ public class Turnover {
         this.book = book;
         this.date = date;
     }
-
-    public Reader getReader() {
-        return reader;
-    }
-
-    public Book getBook() {
-        return book;
-    }
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class OperationsWithBooks {
     private BooksDao books = new BooksDaoImpl();
 
+
     public void showAllBooks() {
         if (books.getAllBooks().isEmpty()){
             System.out.println("Извините, в библиотеке нет книг.");
@@ -40,6 +41,7 @@ public class OperationsWithBooks {
     }
 
     public void correctBook(Book oldBook, String[] book){
-
+        books.updateBook(oldBook, new Book(Integer.parseInt(book[0]),book[1], book[2], Integer.parseInt(book[3]),
+                Integer.parseInt(book[4])));
     }
 }

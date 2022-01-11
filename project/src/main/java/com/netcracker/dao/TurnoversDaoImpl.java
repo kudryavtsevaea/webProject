@@ -1,9 +1,12 @@
 package com.netcracker.dao;
 
 import com.netcracker.models.Book;
+import com.netcracker.models.Library;
 import com.netcracker.models.Reader;
 import com.netcracker.models.Turnover;
 import com.netcracker.services.DataManagerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TurnoversDaoImpl implements TurnoversDao {
+    private static final Logger log = LoggerFactory.getLogger(TurnoversDaoImpl.class);
 
     @Override
     public List<Turnover> getAllBooksOnHnd() {
@@ -22,6 +26,7 @@ public class TurnoversDaoImpl implements TurnoversDao {
                     .getConnection().prepareStatement("select * from book_turnover_with_info2");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                if (resultSet.getString(1) == Library.getInstance().currentReader.getName()){
                 Reader reader = new Reader(resultSet.getString(1));
                 Book book = new Book(resultSet.getLong(2), resultSet.getString(3),
                         resultSet.getString(4), resultSet.getInt(5),
@@ -29,24 +34,25 @@ public class TurnoversDaoImpl implements TurnoversDao {
                 book.setHandedOut(resultSet.getBoolean(8));
 
                 turnovers.add(new Turnover(reader, book, resultSet.getDate(7)));
+                }
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка при загрузке выданных книг.");
+            log.error("Ошибка при загрузке выданных книг.");
         }
         return turnovers;
     }
 
     @Override
-    public boolean getBook(String name) {
+    public boolean getBook(long id) {
         try {
             CallableStatement stmt = DataManagerService.getConnection().prepareCall
-                    ("update book_turnover_with_info2 set is_handed_out = ? where book_name = ?");
+                    ("update book_turnover_with_info2 set is_handed_out = ? where inventory_number = ?");
             stmt.setBoolean(1, true);
-            stmt.setString(2,name);
+            stmt.setLong(2,id);
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("Ошибка при выдаче книги.");
+            log.error("Ошибка при выдаче книги.");
         }
         return false;
     }
@@ -61,7 +67,7 @@ public class TurnoversDaoImpl implements TurnoversDao {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("Ошибка при возврате книги.");
+            log.error("Ошибка при возврате книги.");
         }
         return false;
     }
