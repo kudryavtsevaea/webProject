@@ -3,6 +3,7 @@ package com.netcracker.dao;
 import com.netcracker.models.Book;
 
 import java.util.List;
+import java.util.Set;
 
 public interface BooksDao {
     List<Book> getAllBooks();
@@ -10,6 +11,6 @@ public interface BooksDao {
     boolean addBook(Book book);
     boolean deleteBook(Book book);
     boolean updateBook(Book oldBook, Book newBook);
-    List<Book> addFromFile(String path);
+    boolean addFromFile(String path);
 
 }

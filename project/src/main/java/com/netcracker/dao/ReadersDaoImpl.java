@@ -23,7 +23,7 @@ public class ReadersDaoImpl implements  ReadersDao{
                     .getConnection().prepareStatement("select * from reader");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                readers.add(new Reader(resultSet.getString(2)));
+                readers.add(new Reader(resultSet.getLong(1), resultSet.getString(2)));
             }
         }
         catch(SQLException e){
@@ -50,12 +50,12 @@ public class ReadersDaoImpl implements  ReadersDao{
     @Override
     public boolean deleteReader(Reader reader) {
         for (Reader r : getAllReaders()){
-            if (r == reader)
+            if (r.equals(reader))
             {
                 try{
                     CallableStatement stmt = DataManagerService.getConnection().prepareCall
-                            ("delete * from reader where readerName = ?");
-                    stmt.setString(1, reader.getName());
+                            ("delete from reader where id = ?");
+                    stmt.setLong(1, r.getId());
                     stmt.executeUpdate();
                 }
                 catch (SQLException e){

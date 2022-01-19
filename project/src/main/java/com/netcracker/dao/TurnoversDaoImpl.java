@@ -23,17 +23,17 @@ public class TurnoversDaoImpl implements TurnoversDao {
         List<Turnover> turnovers = new ArrayList<>();
         try {
             PreparedStatement preparedStatement = DataManagerService.getInstance()
-                    .getConnection().prepareStatement("select * from book_turnover_with_info2");
+                    .getConnection().prepareStatement("select * from book_turnover_with_info3");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 if (resultSet.getString(1) == Library.getInstance().currentReader.getName()){
-                Reader reader = new Reader(resultSet.getString(1));
-                Book book = new Book(resultSet.getLong(2), resultSet.getString(3),
-                        resultSet.getString(4), resultSet.getInt(5),
-                        resultSet.getInt(6));
-                book.setHandedOut(resultSet.getBoolean(8));
+                Reader reader = new Reader(resultSet.getLong(1), resultSet.getString(2));
+                Book book = new Book(resultSet.getLong(3), resultSet.getString(4),
+                        resultSet.getString(5), resultSet.getInt(6),
+                        resultSet.getInt(7));
+                book.setHandedOut(resultSet.getBoolean(9));
 
-                turnovers.add(new Turnover(reader, book, resultSet.getDate(7)));
+                turnovers.add(new Turnover(reader, book, resultSet.getDate(8)));
                 }
             }
         } catch (SQLException e) {
@@ -48,8 +48,9 @@ public class TurnoversDaoImpl implements TurnoversDao {
             CallableStatement stmt = DataManagerService.getConnection().prepareCall
                     ("update book_turnover_with_info2 set is_handed_out = ? where inventory_number = ?");
             stmt.setBoolean(1, true);
-            stmt.setLong(2,id);
+            stmt.setLong(2, id);
             stmt.executeUpdate();
+            System.out.println(".");
             return true;
         } catch (SQLException e) {
             log.error("Ошибка при выдаче книги.");

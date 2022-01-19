@@ -71,11 +71,11 @@ public class KeyListener {
                 break;
             case ELEVEN:
                 //редактировать пользователя
-                keyListenerService.correctUser();
+                keyListenerService.updateUser();
                 break;
             case TWELVE:
                 //редактировать книгу
-                keyListenerService.correctBook();
+                keyListenerService.updateBook();
                 break;
             case LEFT:
                 //переход в меню

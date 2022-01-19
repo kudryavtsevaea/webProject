@@ -1,10 +1,13 @@
 package com.netcracker.models;
 
+import lombok.Data;
+
+@Data
 public class Library {
 
     private static Library INSTANCE = null;
 
-    public Reader currentReader;
+    private Reader currentReader;
 
     private Library(){
 

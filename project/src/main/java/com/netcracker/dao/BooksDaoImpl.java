@@ -12,9 +12,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -90,15 +88,17 @@ public class BooksDaoImpl implements BooksDao{
     @Override
     public boolean deleteBook(Book book) {
         for (Book b : getAllBooks()) {
-            if (b == book) {
+            if (b.equals(book)) {
+                System.out.println("equals");
                 try {
                     CallableStatement stmt = DataManagerService.getConnection().prepareCall
-                            ("delete * from book where book_name = ?");
-                    stmt.setString(1, b.getBookName());
+                            ("delete from book where inventory_number = ?");
+                    stmt.setLong(1, b.getId());
                     stmt.executeUpdate();
                 } catch (SQLException e) {
                     log.error("Ошибка при удалении книги в классе BooksDaoImpl.");
                 }
+                log.info("Книга {} удалена", b.getBookName());
                 return true;
             }
         }
@@ -106,27 +106,27 @@ public class BooksDaoImpl implements BooksDao{
     }
 
     @Override
-    public List<Book> addFromFile(String path) {
-        List<Book> books = new ArrayList<>();
-        books.addAll(getAllBooks());
+    public boolean addFromFile(String path) {
         try(Scanner sc = new Scanner(new File(path))){
-            while(sc.hasNextLine()){
+            while(sc.hasNextLine()) {
                 String s = sc.nextLine();
                 String[] str = s.split(";");
                 Book book = new Book(Integer.parseInt(str[0]), str[1], str[2], Integer.parseInt(str[3]),
                         Integer.parseInt(str[4]));
-                books.add(book);
+                   addBook(book);
             }
+            return true;
         }
         catch(FileNotFoundException e2){
             log.info("Файл не найден.");
-            System.out.println("Файл не найден.");
+           // System.out.println("Файл не найден.");
         }
         catch(IOException e1){
             log.info("Заданный путь не верный.");
-            System.out.println("Введена некорректная информация.");
+            //System.out.println("Введена некорректная информация.");
         }
-        return books;
+
+        return false;
     }
 
     @Override

@@ -24,9 +24,4 @@ public class LibrarySystem{
         System.out.println("<- Назад         Выход(q)");
     }
 
-    public static void authentication(){
-        System.out.println("Добро пожаловать в библиотеку! \n" +
-                "Авторизуйтесь.\n");
-    }
-
 }

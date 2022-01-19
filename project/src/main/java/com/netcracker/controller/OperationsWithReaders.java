@@ -17,7 +17,7 @@ public class OperationsWithReaders{
 
     public void addReader(String newUser) {
         try {
-            readers.addReader(new Reader(newUser));
+            readers.addReader(new Reader(0, newUser));
         }
         catch(SQLException e){
             log.error("Ошибка при добавлении пользователя из класса OperationsWithReaders.");
@@ -25,16 +25,16 @@ public class OperationsWithReaders{
 
     }
 
-    public void deleteReader(String removableUser){
+    public void deleteReader(Reader removableUser){
         try {
-            readers.deleteReader(new Reader(removableUser));
+            readers.deleteReader(removableUser);
         }
-        catch(SQLException e){
+        catch(Exception e){
             log.error("Ошибка при удалении пользователя из класса OperationsWithReaders.");
         }
     }
 
-    public void correctReader(Reader oldReader, Reader newReader){
+    public void updateReader(Reader oldReader, Reader newReader){
         readers.updateReader(oldReader, newReader);
     }
 }

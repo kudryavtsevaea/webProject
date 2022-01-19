@@ -3,9 +3,8 @@ package com.netcracker.controller;
 import com.netcracker.dao.BooksDao;
 import com.netcracker.dao.BooksDaoImpl;
 import com.netcracker.models.Book;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+
 public class OperationsWithBooks {
     private BooksDao books = new BooksDaoImpl();
 
@@ -20,7 +19,7 @@ public class OperationsWithBooks {
     }
 
     public void addListOfBooks(String path){
-        books.addFromFile(path).forEach(System.out::println);
+        books.addFromFile(path);
     }
 
     public void searchByRegex(String requiredString){
@@ -40,7 +39,7 @@ public class OperationsWithBooks {
 
     }
 
-    public void correctBook(Book oldBook, String[] book){
+    public void updateBook(Book oldBook, String[] book){
         books.updateBook(oldBook, new Book(Integer.parseInt(book[0]),book[1], book[2], Integer.parseInt(book[3]),
                 Integer.parseInt(book[4])));
     }

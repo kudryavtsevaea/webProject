@@ -21,8 +21,9 @@ public class Authentication {
 
     public void nameCheck(String name) throws SQLException {
         for (Reader r : preplyb.getReadersDao().getAllReaders()) {
-            if (r.getName() == name) {
-                preplyb.getLib().currentReader.setName(name);
+            if (r.getName() != null && r.getName().equals(name) )
+            {
+                preplyb.getLib().getCurrentReader().setName(name);
                 log.info("Пользователь {} найден в базе.", name);
                 preplyb.getLibsys().printMenu();
                 break;
@@ -30,8 +31,8 @@ public class Authentication {
 
         }
         log.info("Пользователь добавлен в базу.");
-        preplyb.getReadersDao().addReader(new Reader(name));
-        preplyb.getLib().currentReader.setName(name);
+            preplyb.getReadersDao().addReader(new Reader(0, name));
+        preplyb.getLib().getCurrentReader().setName(name);
         preplyb.getLibsys().printMenu();
     }
 }

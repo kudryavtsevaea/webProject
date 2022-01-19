@@ -7,10 +7,11 @@ import java.sql.SQLException;
 @Data
 @ToString
 public class Reader implements Comparable<Reader>{
-    private int id;
+    private long id;
     private String name;
 
-    public Reader(String name) throws SQLException {
+    public Reader(long id, String name) throws SQLException {
+        this.id = id;
         this.name = name;
     }
 
