@@ -1,1 +1,0 @@
-1. добавить логирование apache logger slf4j
