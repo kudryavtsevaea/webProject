@@ -2,18 +2,21 @@ package com.netcracker.domain.controller;
 
 import com.netcracker.domain.model.User;
 import com.netcracker.domain.services.UserRepository;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/library")
+@Controller
 public class MainWindowController {
     private UserRepository userRepository = new UserRepository();
 
 
-    @GetMapping
-    public String welcome(){
-        return "Welcome to the library!";
+    @GetMapping("/")
+    public String welcome(Model model){
+        model.addAttribute("title", "главная страница");
+        return "mainWindow";
     }
 
 
