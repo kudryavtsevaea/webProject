@@ -10,7 +10,7 @@ create table Authour(
     Author_name VARCHAR(100)
 );
 
-create table NameOfBook(
+create table Name_of_book(
 	Id INT PRIMARY KEY AUTO_INCREMENT,
     Name_of_book VARCHAR(100)
 );
