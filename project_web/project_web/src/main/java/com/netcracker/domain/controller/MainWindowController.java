@@ -1,39 +1,35 @@
 package com.netcracker.domain.controller;
 
+import com.netcracker.domain.dao.UserDaoImpl;
 import com.netcracker.domain.model.User;
-import com.netcracker.domain.services.UserRepository;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+
+@RestController
 public class MainWindowController {
-    private UserRepository userRepository = new UserRepository();
+    private UserDaoImpl users = new UserDaoImpl();
 
 
     @GetMapping("/")
-    public String welcome(Model model){
-        model.addAttribute("title", "главная страница");
-        return "mainWindow";
+    public String welcome(){
+        return "Главная страница";
     }
 
-
-    //registration
     @GetMapping("/registration")
     public void registration(@RequestBody int id, @RequestBody String name){
-        userRepository.add(id,name);
+        users.addUser(new User(id, name));
     }
 
     @GetMapping("/admin")
-    public void getAdminsWindow(){
-
+    public String getAdminsWindow(){
+       return "Администратор.";
     }
 
     @GetMapping("/{name}")
-    public void getUsersWaindow(){
-
+    public String getUsersWindow(){
+        return "Пользователь.";
     }
 
     public void authorization(@RequestBody int id, @RequestBody String name){
@@ -42,11 +38,11 @@ public class MainWindowController {
         }
         else
         {
-           if (!userRepository.equals(new User(id,name))){
+           if (!users.getUserRepository().equals(new User(id,name))){
                registration(id,name);
            }
            else{
-               getUsersWaindow();
+               getUsersWindow();
            }
         }
     }
