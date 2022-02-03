@@ -26,7 +26,9 @@ public class BookRepository {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
                     bookStorage.add(new Book(resultSet.getInt(1), resultSet.getInt(2),
-                            resultSet.getInt(3), resultSet.getBoolean(4)));
+                            resultSet.getInt(3), resultSet.getInt(4),
+                            resultSet.getInt(5),resultSet.getInt(6),
+                            resultSet.getBoolean(7)));
                 }
             }
             catch(SQLException e){
