@@ -21,7 +21,7 @@ public class UserRepository {
     private UserRepository(){
         try {
             PreparedStatement preparedStatement = DataManagerService.getInstance()
-                    .getConnection().prepareStatement("select * from reader");
+                    .getConnection().prepareStatement("select * from Reader");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 User newUser = new User(resultSet.getInt(1), resultSet.getString(2));

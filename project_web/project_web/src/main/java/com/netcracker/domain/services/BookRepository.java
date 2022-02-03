@@ -22,7 +22,7 @@ public class BookRepository {
     private BookRepository(){
             try {
                 PreparedStatement preparedStatement = DataManagerService.getInstance()
-                        .getConnection().prepareStatement("select * from book");
+                        .getConnection().prepareStatement("select * from Book");
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
                     bookStorage.add(new Book(resultSet.getInt(1), resultSet.getInt(2),
