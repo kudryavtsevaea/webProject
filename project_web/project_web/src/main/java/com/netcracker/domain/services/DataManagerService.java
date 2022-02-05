@@ -34,8 +34,10 @@ public class DataManagerService {
                     (property.getProperty("db.host"), property.getProperty("db.login"),
                             property.getProperty("db.password"));
         }
-        catch(SQLException | IOException e){
+        catch(IOException e){
             log.error("Property-файл не найден.");
+        }
+        catch(SQLException e){
             log.error("Не удалось подключиться к базе данных.");
         }
         return null;

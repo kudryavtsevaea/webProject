@@ -19,18 +19,18 @@ public class UserRepository {
     private static final Logger log = LoggerFactory.getLogger(UserRepository.class);
 
     private UserRepository(){
-        try {
-            PreparedStatement preparedStatement = DataManagerService.getInstance()
-                    .getConnection().prepareStatement("select * from Reader");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                User newUser = new User(resultSet.getInt(1), resultSet.getString(2));
-                userStorage.put(newUser.getId(), newUser.getName());
-            }
-        }
-        catch(SQLException e){
-            log.error("Ошибка при загрузке пользователей в классе UserRepository.");
-        }
+//        try {
+//            PreparedStatement preparedStatement = DataManagerService.getInstance()
+//                    .getConnection().prepareStatement("select * from reader");
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            while (resultSet.next()) {
+//                User newUser = new User(resultSet.getInt(1), resultSet.getString(2));
+//                userStorage.put(newUser.getId(), newUser.getName());
+//            }
+//        }
+//        catch(SQLException e){
+//            log.error("Ошибка при загрузке пользователей в классе UserRepository.");
+//        }
     }
 
     public static UserRepository getInstance(){

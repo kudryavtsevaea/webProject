@@ -20,9 +20,20 @@ public class BookRepository {
     private static final Logger log = LoggerFactory.getLogger(BookRepository.class);
 
     private BookRepository(){
-            try {
+
+    }
+
+    public static BookRepository getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new BookRepository();
+        }
+        return INSTANCE;
+    }
+
+    public List<Book> getAllBooks(){
+        try {
                 PreparedStatement preparedStatement = DataManagerService.getInstance()
-                        .getConnection().prepareStatement("select * from Book");
+                        .getConnection().prepareStatement("select * from book");
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
                     bookStorage.add(new Book(resultSet.getInt(1), resultSet.getInt(2),
@@ -34,13 +45,6 @@ public class BookRepository {
             catch(SQLException e){
                 log.error("Ошибка при загрузке книг в классе BookRepository.");
             }
+        return bookStorage;
     }
-
-    public static BookRepository getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new BookRepository();
-        }
-        return INSTANCE;
-    }
-
 }
