@@ -1,5 +1,8 @@
 package com.netcracker.domain.model;
 
+import lombok.Data;
+
+@Data
 public class Book {
     private int inventoryNumber;
     private int authorId;
@@ -19,4 +22,5 @@ public class Book {
         this.infoId = infoId;
         this.isHandedOut = isHandedOut;
     }
+
 }

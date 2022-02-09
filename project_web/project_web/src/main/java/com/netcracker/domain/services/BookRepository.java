@@ -41,10 +41,13 @@ public class BookRepository {
                             resultSet.getInt(5),resultSet.getInt(6),
                             resultSet.getBoolean(7)));
                 }
+
             }
             catch(SQLException e){
                 log.error("Ошибка при загрузке книг в классе BookRepository.");
-            }
+                e.printStackTrace();
+        }
         return bookStorage;
     }
+
 }

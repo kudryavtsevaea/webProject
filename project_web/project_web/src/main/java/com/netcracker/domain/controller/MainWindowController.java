@@ -27,10 +27,10 @@ public class MainWindowController {
        return "Администратор.";
     }
 
-    @GetMapping("/{name}")
-    public String getUsersWindow(){
-        return "Пользователь.";
-    }
+   // @GetMapping("/{name}")
+   // public String getUsersWindow(){
+     //   return "Пользователь.";
+    //}
 
     public void authorization(@RequestBody int id, @RequestBody String name){
         if (id == 123 && name == "admin"){
@@ -42,7 +42,7 @@ public class MainWindowController {
                registration(id,name);
            }
            else{
-               getUsersWindow();
+      //         getUsersWindow();
            }
         }
     }
