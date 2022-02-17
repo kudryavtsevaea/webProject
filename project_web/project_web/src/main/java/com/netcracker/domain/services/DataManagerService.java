@@ -14,7 +14,7 @@ public class DataManagerService {
 
     private static DataManagerService INSTANCE = null;
     private static final Logger log = LoggerFactory.getLogger(DataManagerService.class);
-    private static String DRIVER = "com.mysql.jdbc.Driver";
+    private static String DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private DataManagerService(){
 
@@ -40,7 +40,7 @@ public class DataManagerService {
         }
         catch(IOException e){
             log.error("Property-файл не найден.", e);
-           // e.printStackTrace();
+            e.printStackTrace();
         }
         catch(SQLException e){
             log.error("Не удалось подключиться к базе данных.", e);

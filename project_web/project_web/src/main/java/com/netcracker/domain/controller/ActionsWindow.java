@@ -1,23 +1,39 @@
 package com.netcracker.domain.controller;
 
-import com.netcracker.domain.model.Book;
+import com.netcracker.domain.dao.BooksDaoImpl;
+import com.netcracker.domain.model.BookWithInfo;
 import com.netcracker.domain.services.BookRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ActionsWindow {
     private BookRepository bookRepository = BookRepository.getInstance();
+    private BooksDaoImpl booksDao = new BooksDaoImpl();
 
-    @GetMapping("/addBook")
-    public void addBookOnPage(@RequestParam Book book){
-        bookRepository.getBookStorage().add(book);
+    @GetMapping ("/booksRepository")
+    public List<BookWithInfo> getAllBooks(){
+        return bookRepository.getAllBooks();
     }
 
-    @GetMapping("/updateUser")
-    public void updateBookOnPage(@RequestParam Book oldBook, @RequestParam Book newBook){
-        bookRepository.getBookStorage().remove(oldBook);
-        bookRepository.getBookStorage().add(newBook);
+    @GetMapping(path = "/booksRepository/{id}")
+    public BookWithInfo getBookById(@PathVariable int id){
+        return bookRepository.getAllBooks().get(id - 1);
+    }
+
+    @PostMapping("/book")
+    public void addBook(@RequestBody BookWithInfo book){
+        booksDao.addBook(book);
+    }
+
+    @PutMapping("/book")
+    public void updateBookOnPage(@RequestBody BookWithInfo newBook){
+        booksDao.updateBook(newBook);
+    }
+
+    @DeleteMapping("book/{id}")
+    public void deleteBookById(@PathVariable int id){
+        booksDao.deleteBook(id - 1);
     }
 }

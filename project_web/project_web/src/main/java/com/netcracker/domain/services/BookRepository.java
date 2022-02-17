@@ -1,6 +1,6 @@
 package com.netcracker.domain.services;
 
-import com.netcracker.domain.model.Book;
+import com.netcracker.domain.model.BookWithInfo;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +16,10 @@ import java.util.List;
 @Data
 public class BookRepository {
     private static BookRepository INSTANCE = null;
-    private List<Book> bookStorage = new ArrayList<>();
+    private List<BookWithInfo> bookStorage = new ArrayList<>();
     private static final Logger log = LoggerFactory.getLogger(BookRepository.class);
 
     private BookRepository(){
-
     }
 
     public static BookRepository getInstance() {
@@ -30,15 +29,15 @@ public class BookRepository {
         return INSTANCE;
     }
 
-    public List<Book> getAllBooks(){
+    public List<BookWithInfo> getAllBooks(){
         try {
                 PreparedStatement preparedStatement = DataManagerService.getInstance()
-                        .getConnection().prepareStatement("select * from book");
+                        .getConnection().prepareStatement("select * from book_with_info");
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
-                    bookStorage.add(new Book(resultSet.getInt(1), resultSet.getInt(2),
-                            resultSet.getInt(3), resultSet.getInt(4),
-                            resultSet.getInt(5),resultSet.getInt(6),
+                    bookStorage.add(new BookWithInfo(resultSet.getInt(1), resultSet.getString(2),
+                            resultSet.getString(3), resultSet.getInt(4),
+                            resultSet.getInt(5),resultSet.getString(6),
                             resultSet.getBoolean(7)));
                 }
 
@@ -49,5 +48,4 @@ public class BookRepository {
         }
         return bookStorage;
     }
-
 }

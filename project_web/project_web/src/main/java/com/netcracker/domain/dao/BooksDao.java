@@ -1,12 +1,13 @@
 package com.netcracker.domain.dao;
 
 import com.netcracker.domain.model.Book;
+import com.netcracker.domain.model.BookWithInfo;
 
 import java.util.List;
 
 public interface BooksDao {
-    void addBook(Book book);
-    void addListOfBooks(List<Book> books);
-    void deleteUser(Book book);
-    void updateUser(Book oldBook, Book newBook);
+    void addBook(BookWithInfo book);
+    void addListOfBooks(List<BookWithInfo> books);
+    void deleteBook(int bookId);
+    void updateBook(BookWithInfo newBook);
 }
