@@ -30,6 +30,31 @@ public class MainWindowController {
         return "specificBook";
     }
 
-    //add,delete,update
+
+    @GetMapping("/")
+    public String add(@RequestBody String text){
+        String[] str = text.split(";");
+        Book newBook = new Book(Integer.parseInt(str[0]), str[1], str[2], Integer.parseInt(str[3]),
+                Integer.parseInt(str[4]), str[5], false);
+        bookRepository.getBookStorage().add(newBook);
+        return "index";
+    }
+
+    @GetMapping("/")
+    public String delete(@RequestBody int id){
+        bookRepository.getBookStorage().remove(id);
+        return "index";
+    }
+
+    @GetMapping("/")
+    public String update(@RequestBody String text){
+        String[] str = text.split(";");
+        Book newBook = new Book(Integer.parseInt(str[0]), str[1], str[2], Integer.parseInt(str[3]),
+                Integer.parseInt(str[4]), str[5], false);
+        int id = newBook.getInventoryNumber();
+        bookRepository.getBookStorage().remove(id);
+        bookRepository.getBookStorage().add(newBook);
+        return "index";
+    }
 
 }
