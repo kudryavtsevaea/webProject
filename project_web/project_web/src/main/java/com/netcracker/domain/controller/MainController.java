@@ -1,26 +1,41 @@
 package com.netcracker.domain.controller;
 
 import com.netcracker.domain.dao.BooksDaoImpl;
+import com.netcracker.domain.dao.UserDaoImpl;
 import com.netcracker.domain.model.BookWithInfo;
-import com.netcracker.domain.services.BookRepository;
+import com.netcracker.domain.repositories.BookRepository;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-public class ActionsWindow {
+@Controller
+public class MainController {
     private BookRepository bookRepository = BookRepository.getInstance();
     private BooksDaoImpl booksDao = new BooksDaoImpl();
 
+    @GetMapping("/")
+    public String greeting () {
+        return "mainWindow";
+    }
+
     @GetMapping ("/booksRepository")
-    public List<BookWithInfo> getAllBooks(){
-        return bookRepository.getAllBooks();
+    public String getAllBooks(Model model){
+       String s = "";
+        for (BookWithInfo b : bookRepository.getAllBooks()){
+           s += b.toString();
+
+       }
+        model.addAttribute("book",s +"\n");
+       return "allBooks";
+     //   return bookRepository.getAllBooks();
     }
 
     @GetMapping(path = "/booksRepository/{id}")
     public BookWithInfo getBookById(@PathVariable int id){
         return bookRepository.getAllBooks().get(id - 1);
     }
+
+    //
 
     @PostMapping("/book")
     public void addBook(@RequestBody BookWithInfo book){
@@ -36,4 +51,6 @@ public class ActionsWindow {
     public void deleteBookById(@PathVariable int id){
         booksDao.deleteBook(id - 1);
     }
+
+
 }
