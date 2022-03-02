@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Library</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -8,20 +8,23 @@
 <button type="submit"><a href="/bookRepository">Show all books</a></button>
 
 <form method="post">
-    <input type="text" name="id" placeholder="Enter id">
-    <button type="submit">Search</button>
+    <input type="text" name="book" placeholder="Enter id" class="form-control">
+    <button type="submit"><a href ="/specificBook">Search</a></button>
 </form>
+
 <form method="post">
-    <input type="text" name="book" placeholder="Enter new book">
-    <button type="submit"><a href ="/book">Add</a></button>
+    <input type="text" name="book" placeholder="Enter new book" class="form-control">
+    <button type="submit" class = "btn bth-success">Add</button>
 </form>
+
 <form method="post">
-    <input type="text" name="id" placeholder="Enter id">
-    <button type="submit"><a href ="/book">Delete</a></button>
+    <input type="text" name="id" placeholder="Enter id" class="form-control">
+    <button type="submit">Delete</button>
 </form>
+
 <form method="post">
     <input type="text" name="name" placeholder="Enter id">
-    <button type="submit"><a href ="/book">Update</a></button>
+    <button type="submit">Update</button>
 </form>
 </body>
 </html>

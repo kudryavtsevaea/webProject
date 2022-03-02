@@ -14,7 +14,7 @@ import java.util.List;
 public class MainWindowController {
     private BookRepository bookRepository = BookRepository.getInstance();
 
-    @RequestMapping("/bookRepository")
+    @GetMapping("/bookRepository")
     public String showAll(Model model){
         List<Book> books = new ArrayList<>();
         for (Book b: bookRepository.getAllBooks()) {
@@ -24,29 +24,29 @@ public class MainWindowController {
         return "bookRepository";
     }
 
-    @RequestMapping("/specificBook")
-    public String showOne(@RequestBody int id, Model model){
-        model.addAttribute("book", bookRepository.getBookStorage().get(id));
+    @GetMapping("/specificBook")
+    public String showOne(@RequestParam int id, Model model){
+        model.addAttribute("book", "mkmkmkml");
         return "specificBook";
     }
 
 
-    @GetMapping("/")
-    public String add(@RequestBody String text){
-        String[] str = text.split(";");
-        Book newBook = new Book(Integer.parseInt(str[0]), str[1], str[2], Integer.parseInt(str[3]),
-                Integer.parseInt(str[4]), str[5], false);
-        bookRepository.getBookStorage().add(newBook);
-        return "index";
-    }
+//    @GetMapping("/book/{id}")
+//    public String add(@RequestBody String text){
+//        String[] str = text.split(";");
+//        Book newBook = new Book(Integer.parseInt(str[0]), str[1], str[2], Integer.parseInt(str[3]),
+//                Integer.parseInt(str[4]), str[5], false);
+//        bookRepository.getBookStorage().add(newBook);
+//        return "index";
+//    }
 
-    @GetMapping("/")
+    @DeleteMapping("/book/{id}")
     public String delete(@RequestBody int id){
         bookRepository.getBookStorage().remove(id);
         return "index";
     }
 
-    @GetMapping("/")
+    @GetMapping("/book/{id}")
     public String update(@RequestBody String text){
         String[] str = text.split(";");
         Book newBook = new Book(Integer.parseInt(str[0]), str[1], str[2], Integer.parseInt(str[3]),
