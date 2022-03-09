@@ -46,7 +46,7 @@ public class Application {
 							booknumber,
 							"info"+booknumber,
 							false
-							))
+					))
 					.collect(Collectors.toList());
 
 
