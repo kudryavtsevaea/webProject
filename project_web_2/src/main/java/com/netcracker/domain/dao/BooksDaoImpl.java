@@ -2,12 +2,10 @@ package com.netcracker.domain.dao;
 
 import com.netcracker.domain.model.Book;
 import com.netcracker.domain.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
-//Not need if you use Spring Data
-public class BooksDaoImpl {
-  /*  @Autowired
-    private BookRepository bookRepository;
+public class BooksDaoImpl implements BooksDao{
+
+    private BookRepository bookRepository = BookRepository.getInstance();
 
     @Override
     public void addBook(Book book) {
@@ -30,5 +28,5 @@ public class BooksDaoImpl {
     @Override
     public Book getById(int id){
         return bookRepository.getAllBooks().get(id);
-    }*/
+    }
 }

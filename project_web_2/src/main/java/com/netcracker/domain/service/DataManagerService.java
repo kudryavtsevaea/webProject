@@ -1,4 +1,4 @@
-package com.netcracker.domain.services;
+package com.netcracker.domain.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,6 @@ public class DataManagerService {
 
     private static DataManagerService INSTANCE = null;
     private static final Logger log = LoggerFactory.getLogger(DataManagerService.class);
-    private static String DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private DataManagerService(){
 
@@ -30,11 +29,12 @@ public class DataManagerService {
     public static Connection getConnection(){
         Properties property = new Properties();
         try(FileInputStream fis = new FileInputStream("src/main/resources/application.properties")){
-            Class.forName(DRIVER);
+            Class.forName(property.getProperty("spring.datasource.driver-class-name"));
             property.load(fis);
             Connection connection = DriverManager.getConnection
-                    (property.getProperty("db.host"), property.getProperty("db.login"),
-                            property.getProperty("db.password"));
+                    (property.getProperty("spring.datasource.url"),
+                            property.getProperty("spring.datasource.username"),
+                            property.getProperty("spring.datasource.password"));
             log.info("connection ", connection);
             return connection;
         }
