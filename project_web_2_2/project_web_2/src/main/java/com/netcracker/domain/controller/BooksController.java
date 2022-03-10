@@ -57,6 +57,7 @@ public class BooksController {
         newBook.setAuthor(paramMap.get("author").get(0));
         newBook.setInfo(paramMap.get("info").get(0));
         newBook.setYear(Integer.valueOf(paramMap.get("year").get(0)));
+        newBook.setInventoryNumber(Integer.valueOf(paramMap.get("id").get(0)));
 
         bookRepository.save(newBook);
         return
@@ -66,23 +67,12 @@ public class BooksController {
 
     @PostMapping(value = "updateBook",consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ModelAndView updateBook(@RequestBody MultiValueMap<String, String> paramMap, ModelAndView model) {
-        System.out.println("Perform Delete "+paramMap.get("id"));
-        List<String> ids = paramMap.get("id");
-        bookRepository.deleteById(Long.valueOf(ids.get(0)));
-
-
-        System.out.println("Perform addition "+paramMap.get("book").get(0));
-        Book newBook= new Book();
-        newBook.setNameOfBook(paramMap.get("book").get(0));
-        newBook.setAuthor(paramMap.get("author").get(0));
-        newBook.setInfo(paramMap.get("info").get(0));
-        newBook.setYear(Integer.valueOf(paramMap.get("year").get(0)));
-        newBook.setInventoryNumber(Integer.valueOf(ids.get(0)));
-
-        bookRepository.save(newBook);
+        deleteBookById(paramMap, model);
+        addBook(paramMap, model);
 
         return
                 new ModelAndView(new RedirectView("/bookRepository"));
     }
+
 
 }
