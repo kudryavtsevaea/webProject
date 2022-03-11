@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Update</title>
+</head>
+<body>
+
+<p th:text = "${id}"></p>
+<form method="POST">
+    <input type="text" name="author" placeholder="Enter author" id = "author" class="form-control">
+    <input type="text" name="book" placeholder="Enter name of book" id = "bookName" class="form-control">
+    <input type="text" name="year" placeholder="Enter year of publishing" id = "dateOfPublishing" class="form-control">
+    <input type="text" name="pages" placeholder="Enter amount of pages" id = "pages" class="form-control">
+    <input type="text" name="info" placeholder="Enter info" id = "info" class="form-control">
+    <button type="submit" formaction = "addBook" class = "btn bth-success">Update</button>
+</form>
+</body>
+</html>

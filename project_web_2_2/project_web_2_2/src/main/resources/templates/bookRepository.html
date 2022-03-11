@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Books</title>
+</head>
+<body>
+<h1>List of books</h1>
+<form>
+    <ul>
+        <th:block th:each="book : ${books}">
+            <li th:utext="${book}"></li>
+        </th:block>
+    </ul>
+</form>
+</body>
+</html>
