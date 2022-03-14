@@ -1,5 +1,7 @@
 package com.netcracker.domain;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +15,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+
+import javax.sql.DataSource;
+import javax.swing.tree.TreePath;
 
 @SpringBootApplication
 public class Application {
@@ -24,6 +31,12 @@ public class Application {
 
 	@Autowired
 	BookRepository bookRepository;
+	@Autowired
+	DataSource dataSource;
+
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
@@ -35,7 +48,7 @@ public class Application {
 			for (String beanName : beanNames) {
 				System.out.println(beanName);
 			}
-			System.out.println("Create  Random Books for Tests");
+			//System.out.println("Create  Random Books for Tests");
 
 			List<Book> generatedBooks = IntStream.range(0, 100).boxed()
 					.map(booknumber -> new Book(
@@ -46,13 +59,22 @@ public class Application {
 							booknumber,
 							"info"+booknumber,
 							false
-					))
+							))
 					.collect(Collectors.toList());
 
 
-			generatedBooks.forEach(System.out::println);
+		//	generatedBooks.forEach(System.out::println);
+		//	System.out.println(jdbcTemplate);
 
 			bookRepository.saveAll(generatedBooks);
+
+			List<Book> books = jdbcTemplate.query("select * from books", new RowMapper<Book>() {
+				@Override
+				public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
+					return null;
+				}
+			});
+
 		};
 	}
 

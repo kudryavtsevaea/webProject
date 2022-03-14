@@ -34,6 +34,10 @@ public class Book {
         this.isHandedOut = isHandedOut;
     }
 
+    public long getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "№" + inventoryNumber +

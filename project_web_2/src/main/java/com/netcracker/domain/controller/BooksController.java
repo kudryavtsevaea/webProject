@@ -2,12 +2,8 @@ package com.netcracker.domain.controller;
 
 import com.netcracker.domain.model.Book;
 import com.netcracker.domain.repository.BookRepository;
-import com.sun.org.apache.xpath.internal.operations.Mod;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -15,20 +11,24 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
+import static com.netcracker.domain.controller.CommonUtil.emptyToNull;
 
 @Controller()
 public class BooksController {
+
+    private CommonUtil commonUtil = new CommonUtil();
+
     @Autowired
     private BookRepository bookRepository;
 
     @GetMapping("bookRepository")
     public String getAllBooks(Model model) {
-        List<Book> allBooks = (List<Book>) bookRepository.findAll();
+        Iterable<Book> allBooks = bookRepository.findAll();
+
         model.addAttribute("books", allBooks);
         return "bookRepository";
     }
@@ -36,44 +36,89 @@ public class BooksController {
     @GetMapping("specificBook")
     public String getBookById(@RequestParam long bookId, Model model) {
         Book book = bookRepository.findById(bookId).get();
-        model.addAttribute("book", book.getNameOfBook());
+        model.addAttribute("book", book);
+        model.addAttribute("bookId", book.getId());
         return "specificBook";
     }
 
-    @GetMapping("newBook")
-    public String add(@RequestBody String text, Model model) {
-        String[] str = text.split(";");
-        Book newBook = new Book(Integer.parseInt(str[0]), str[1], str[2], Integer.parseInt(str[3]),
-                Integer.parseInt(str[4]), str[5], false);
-        bookRepository.save(newBook);
-        List<String> names = new ArrayList<>();
-        for (Book b:
-             bookRepository.findAll()) {
-            names.add(b.getNameOfBook());
-        }
-        model.addAttribute("books", names);
-
-        return "newBook";
+    @PostMapping(value = "deleteBook", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    public ModelAndView deleteBookById(@RequestBody MultiValueMap<String, String> paramMap, ModelAndView model) {
+        commonUtil.getLogger().debug("Perform Delete {}", paramMap.get("id"));
+        List<String> ids = paramMap.get("id");
+        bookRepository.deleteById(Long.valueOf(ids.get(0)) + 1);
+        return new ModelAndView(new RedirectView("/"));
     }
 
-    @PostMapping(value = "deleteBook",consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public ModelAndView deleteBookById(@RequestBody MultiValueMap<String, String> paramMap, int id) {
+
+    /**
+     * todo please use example from method#updateBook
+     * catch any errors and provide readable message
+     */
+    @PostMapping(value = "addBook", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    public ModelAndView addBook(@RequestBody MultiValueMap<String, String> paramMap, ModelAndView model) {
+
+        commonUtil.getLogger().debug("Perform addition {}", paramMap.getFirst("book"));
+        commonUtil.getLogger().debug("addBook paramMap {}", paramMap);
+
         List<String> ids = paramMap.get("id");
-        bookRepository.deleteById(Long.valueOf(ids.get(id)));
+
+        Book book = new Book();
+
+        try {
+            commonUtil.getLogger().debug("book for update {}", book);
+            Optional.ofNullable(emptyToNull(paramMap.getFirst("info"))).ifPresent(book::setInfo);
+            Optional.ofNullable(emptyToNull(paramMap.getFirst("book"))).ifPresent(book::setNameOfBook);
+            Optional.ofNullable(emptyToNull(paramMap.getFirst("year"))).filter((b) -> Integer.valueOf(b) > 1000)
+                            .map(Integer::valueOf).ifPresent(book::setYear);
+            Optional.ofNullable(emptyToNull(paramMap.getFirst("pages"))).map(Integer::valueOf)
+                            .filter((b) -> Integer.valueOf(b) >= 1).ifPresent(book::setPages);
+            Optional.ofNullable(emptyToNull(paramMap.getFirst("author"))).ifPresent(book::setAuthor);
+            commonUtil.getLogger().debug("book after updated {}", book);
+        } catch (Exception ex) {
+            commonUtil.getLogger().error("Error due to process request parameters", ex);
+            throw ex;
+        }
+        book.setInventoryNumber((int) (bookRepository.count()));
+        bookRepository.save(book);
+
         return
                 new ModelAndView(new RedirectView("/"));
+
     }
 
-    @GetMapping
-    public String updateBookById(@RequestBody String text) {
-        String[] str = text.split(";");
-        Book newBook = new Book(Integer.parseInt(str[0]), str[1], str[2], Integer.parseInt(str[3]),
-                Integer.parseInt(str[4]), str[5], false);
-        int id = newBook.getInventoryNumber();
+    @PostMapping(value = "updateBook", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+    public ModelAndView updateBook(@RequestBody MultiValueMap<String, String> paramMap) {
 
-        bookRepository.deleteById((long) id);
-        bookRepository.save(newBook);
-        return "newBook";
+        commonUtil.getLogger().debug("addBook paramMap {}", paramMap);
+
+        Long bookId;
+        try {
+            bookId = Optional.of(paramMap.getFirst("bookId")).map(Long::valueOf).get();
+        } catch (Exception ex) {
+            commonUtil.getLogger().error("couldn't get bookId by Parameter {}", paramMap.getFirst("bookId"), ex);
+            throw ex;
+        }
+
+        Book book = bookRepository.findById(bookId).get();
+        try {
+            commonUtil.getLogger().debug("book for update {}", book);
+            //skip blank fields
+            Optional.ofNullable(emptyToNull(paramMap.getFirst("info"))).ifPresent(book::setInfo);
+            Optional.ofNullable(emptyToNull(paramMap.getFirst("book"))).ifPresent(book::setNameOfBook);
+            Optional.ofNullable(emptyToNull(paramMap.getFirst("year"))).map(Integer::valueOf).ifPresent(book::setYear);
+            Optional.ofNullable(emptyToNull(paramMap.getFirst("pages"))).map(Integer::valueOf).ifPresent(book::setPages);
+            Optional.ofNullable(emptyToNull(paramMap.getFirst("author"))).ifPresent(book::setAuthor);
+            commonUtil.getLogger().debug("book after updated {}", book);
+        } catch (Exception ex) {
+            commonUtil.getLogger().error("Error due to process request parameters", ex);
+            throw ex;
+        }
+        bookRepository.save(book);
+        ModelAndView specificBook = new ModelAndView(new RedirectView("specificBook"));
+        specificBook.getModel().put("bookId", bookId);
+        specificBook.getModel().put("book", book);
+        return specificBook;
     }
+
 
 }

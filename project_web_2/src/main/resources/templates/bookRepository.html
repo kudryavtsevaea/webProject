@@ -6,10 +6,13 @@
 </head>
 <body>
 <h1>List of books</h1>
-<ul>
-    <th:block th:each="book : ${books}">
-        <li th:utext="${book}">..</li>
-    </th:block>
-</ul>
+<form>
+    <ul>
+        <th:block th:each="book : ${books}">
+            <li th:utext="${book}"></li>
+        </th:block>
+    </ul>
+</form>
+<a href="/">Back To Main Page</a>
 </body>
 </html>
