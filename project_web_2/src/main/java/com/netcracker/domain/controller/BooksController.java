@@ -35,7 +35,7 @@ public class BooksController {
 
     @GetMapping("specificBook")
     public String getBookById(@RequestParam long bookId, Model model) {
-        Book book = bookRepository.findById(bookId).get();
+        Book book = bookRepository.findById(bookId + 1).get();
         model.addAttribute("book", book);
         model.addAttribute("bookId", book.getId());
         return "specificBook";
@@ -45,22 +45,14 @@ public class BooksController {
     public ModelAndView deleteBookById(@RequestBody MultiValueMap<String, String> paramMap, ModelAndView model) {
         commonUtil.getLogger().debug("Perform Delete {}", paramMap.get("id"));
         List<String> ids = paramMap.get("id");
-        bookRepository.deleteById(Long.valueOf(ids.get(0)) + 1);
+        bookRepository.deleteById(Long.valueOf(ids.get(0)));
         return new ModelAndView(new RedirectView("/"));
     }
 
-
-    /**
-     * todo please use example from method#updateBook
-     * catch any errors and provide readable message
-     */
     @PostMapping(value = "addBook", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ModelAndView addBook(@RequestBody MultiValueMap<String, String> paramMap, ModelAndView model) {
-
         commonUtil.getLogger().debug("Perform addition {}", paramMap.getFirst("book"));
         commonUtil.getLogger().debug("addBook paramMap {}", paramMap);
-
-        List<String> ids = paramMap.get("id");
 
         Book book = new Book();
 
@@ -68,12 +60,12 @@ public class BooksController {
             commonUtil.getLogger().debug("book for update {}", book);
             Optional.ofNullable(emptyToNull(paramMap.getFirst("info"))).ifPresent(book::setInfo);
             Optional.ofNullable(emptyToNull(paramMap.getFirst("book"))).ifPresent(book::setNameOfBook);
-            Optional.ofNullable(emptyToNull(paramMap.getFirst("year"))).filter((b) -> Integer.valueOf(b) > 1000)
-                            .map(Integer::valueOf).ifPresent(book::setYear);
+            Optional.ofNullable(emptyToNull(paramMap.getFirst("year")))
+                    .filter((b) -> Integer.valueOf(b) > 1000)
+                    .map(Integer::valueOf).ifPresent(book::setYear);
             Optional.ofNullable(emptyToNull(paramMap.getFirst("pages"))).map(Integer::valueOf)
                             .filter((b) -> Integer.valueOf(b) >= 1).ifPresent(book::setPages);
             Optional.ofNullable(emptyToNull(paramMap.getFirst("author"))).ifPresent(book::setAuthor);
-            commonUtil.getLogger().debug("book after updated {}", book);
         } catch (Exception ex) {
             commonUtil.getLogger().error("Error due to process request parameters", ex);
             throw ex;
@@ -83,41 +75,39 @@ public class BooksController {
 
         return
                 new ModelAndView(new RedirectView("/"));
-
     }
 
     @PostMapping(value = "updateBook", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ModelAndView updateBook(@RequestBody MultiValueMap<String, String> paramMap) {
 
-        commonUtil.getLogger().debug("addBook paramMap {}", paramMap);
+            Long bookId;
+            try {
+                bookId = Optional.of(paramMap.getFirst("bookId")).map(Long::valueOf).get();
+            } catch (Exception ex) {
 
-        Long bookId;
-        try {
-            bookId = Optional.of(paramMap.getFirst("bookId")).map(Long::valueOf).get();
-        } catch (Exception ex) {
-            commonUtil.getLogger().error("couldn't get bookId by Parameter {}", paramMap.getFirst("bookId"), ex);
-            throw ex;
-        }
+                throw ex;
+            }
 
-        Book book = bookRepository.findById(bookId).get();
-        try {
-            commonUtil.getLogger().debug("book for update {}", book);
-            //skip blank fields
-            Optional.ofNullable(emptyToNull(paramMap.getFirst("info"))).ifPresent(book::setInfo);
-            Optional.ofNullable(emptyToNull(paramMap.getFirst("book"))).ifPresent(book::setNameOfBook);
-            Optional.ofNullable(emptyToNull(paramMap.getFirst("year"))).map(Integer::valueOf).ifPresent(book::setYear);
-            Optional.ofNullable(emptyToNull(paramMap.getFirst("pages"))).map(Integer::valueOf).ifPresent(book::setPages);
-            Optional.ofNullable(emptyToNull(paramMap.getFirst("author"))).ifPresent(book::setAuthor);
-            commonUtil.getLogger().debug("book after updated {}", book);
-        } catch (Exception ex) {
-            commonUtil.getLogger().error("Error due to process request parameters", ex);
-            throw ex;
-        }
-        bookRepository.save(book);
-        ModelAndView specificBook = new ModelAndView(new RedirectView("specificBook"));
-        specificBook.getModel().put("bookId", bookId);
-        specificBook.getModel().put("book", book);
-        return specificBook;
+            Book book = bookRepository.findById(bookId).get();
+            try {
+
+                Optional.ofNullable(emptyToNull(paramMap.getFirst("info"))).ifPresent(book::setInfo);
+                Optional.ofNullable(emptyToNull(paramMap.getFirst("book"))).ifPresent(book::setNameOfBook);
+                Optional.ofNullable(emptyToNull(paramMap.getFirst("year"))).map(Integer::valueOf).ifPresent(book::setYear);
+                Optional.ofNullable(emptyToNull(paramMap.getFirst("pages"))).map(Integer::valueOf).ifPresent(book::setPages);
+                Optional.ofNullable(emptyToNull(paramMap.getFirst("author"))).ifPresent(book::setAuthor);
+                commonUtil.getLogger().debug("book after update {}", paramMap);
+            } catch (Exception ex) {
+
+                throw ex;
+            }
+
+            bookRepository.save(book);
+            ModelAndView specificBook = new ModelAndView(new RedirectView("specificBook"));
+            specificBook.getModel().put("bookId", bookId);
+            specificBook.getModel().put("book", book);
+            return specificBook;
+
     }
 
 

@@ -7,6 +7,16 @@
 <body>
 <p th:text = "${book}"/>
 
-<a href="/">Back To Main Page</a>
+<form method="POST">
+    <input type="text" name="bookId" id="bookId" readonly th:value="${bookId}">
+    <input type="text" name="author" placeholder="Enter author" id = "author" class="form-control">
+    <input type="text" name="book" placeholder="Enter name of book" id = "bookName" class="form-control">
+    <input type="text" name="year" placeholder="Enter year of publishing" id = "dateOfPublishing" class="form-control">
+    <input type="text" name="pages" placeholder="Enter amount of pages" id = "pages" class="form-control">
+    <input type="text" name="info" placeholder="Enter info" id = "info" class="form-control">
+    <button type="submit" formaction = "updateBook" class = "btn bth-success">Update</button>
+</form>
+
+<a href="/">Back To Main page</a>
 </body>
 </html>
