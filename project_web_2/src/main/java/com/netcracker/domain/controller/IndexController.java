@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 public class IndexController {
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
-    @RequestMapping
-    public String index() {
-        return "index";
-    }
+   // @RequestMapping
+    //public String index() {
+        //return "index";
+    //}
 
     @RequestMapping("index")
     public String indexAsItIs() {

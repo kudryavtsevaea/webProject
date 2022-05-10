@@ -6,7 +6,8 @@
 </head>
 <body>
 <p th:text = "${book}"/>
-
+<hr>
+Enter new parameters into the form below
 <form method="POST">
     <input type="text" name="bookId" id="bookId" readonly th:value="${bookId}">
     <input type="text" name="author" placeholder="Enter author" id = "author" class="form-control">
@@ -16,7 +17,6 @@
     <input type="text" name="info" placeholder="Enter info" id = "info" class="form-control">
     <button type="submit" formaction = "updateBook" class = "btn bth-success">Update</button>
 </form>
-
 <a href="/">Back To Main page</a>
 </body>
 </html>

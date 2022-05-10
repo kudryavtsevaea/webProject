@@ -3,6 +3,7 @@ package com.netcracker.domain.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "books")
@@ -22,6 +23,8 @@ public class Book {
     private int pages;
     private String info;
     private boolean isHandedOut;
+    private Date out;
+    private Date back;
 
     public Book(int inventoryNumber, String author, String nameOfBook, int year, int pages, String info,
                         boolean isHandedOut) {
