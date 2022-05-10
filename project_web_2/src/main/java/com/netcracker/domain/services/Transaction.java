@@ -12,7 +12,8 @@ public class Transaction {
     private User user;
     private Book book;
     private Action action;
-    private Date date;
+    private Date date1;
+    private Date date2;
 
     @PostMapping("/handedBooks")
     private String getBackAction(Transaction transaction, Model model){
@@ -22,8 +23,8 @@ public class Transaction {
 
   public String print (Action ation){
         if (action == Action.GIVE)
-            return user +"\t" + "'" + book.getNameOfBook() + "' \t" + date + "\t - \t";
+            return user +"\t" + "'" + book.getNameOfBook() + "' \t" + date1 + "\t - \t";
         else
-            return user +"\t" + "'" + book.getNameOfBook() + "' \t - \t" + date + "\t";
+            return user +"\t" + "'" + book.getNameOfBook() + "' \t" + date1 + "\t - \t" + date2 +"\t";
   }
 }
