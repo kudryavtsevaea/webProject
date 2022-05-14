@@ -1,6 +1,7 @@
 package com.netcracker.domain.model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,7 +13,10 @@ public class User {
     private String username;
     private String password;
     private boolean active;
-   // private List<Book> handedBooks;
+    @ElementCollection(targetClass = Book.class, fetch = FetchType.LAZY)
+    @CollectionTable(name = "user_books", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private List<Book> handedBooks;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -59,11 +63,19 @@ public class User {
         this.roles = roles;
     }
 
+    public List<Book> getHandedBooks() {
+        return handedBooks;
+    }
+
+    public void setHandedBooks(List<Book> handedBooks) {
+        this.handedBooks = handedBooks;
+    }
+
     @Override
     public String toString() {
         return
                 "Reader: '" + username + '\'' +
-               // ", handed books: {" + handedBooks +
+                ", handed books: {" + handedBooks +
                 '}';
     }
 }
