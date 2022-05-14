@@ -21,10 +21,21 @@ public class Transaction {
         return "handedBooks";
     }
 
-  public String print (Action ation){
+  public String print (Action action){
         if (action == Action.GIVE)
             return user +"\t" + "'" + book.getNameOfBook() + "' \t" + date1 + "\t - \t";
         else
             return user +"\t" + "'" + book.getNameOfBook() + "' \t" + date1 + "\t - \t" + date2 +"\t";
   }
+
+//  public void getBook(){
+//
+//  }
+//
+//  public void giveBack(){
+//
+//  }
+
+
+
 }

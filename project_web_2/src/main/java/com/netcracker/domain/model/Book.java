@@ -1,49 +1,83 @@
 package com.netcracker.domain.model;
 
-import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
+@NoArgsConstructor
 @Entity
 @Table(name = "books")
-@Data
 public class Book {
-
-    public Book() {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private int inventoryNumber;
     private String author;
     private String nameOfBook;
     private int year;
     private int pages;
     private String info;
-    private boolean isHandedOut;
-    private Date out;
-    private Date back;
 
-    public Book(int inventoryNumber, String author, String nameOfBook, int year, int pages, String info,
-                        boolean isHandedOut) {
-        this.inventoryNumber = inventoryNumber;
+    public Book(String author, String nameOfBook, int year, int pages, String info) {
         this.author = author;
         this.nameOfBook = nameOfBook;
         this.year = year;
         this.pages = pages;
         this.info = info;
-        this.isHandedOut = isHandedOut;
     }
+
 
     public long getId() {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getNameOfBook() {
+        return nameOfBook;
+    }
+
+    public void setNameOfBook(String nameOfBook) {
+        this.nameOfBook = nameOfBook;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getPages() {
+        return pages;
+    }
+
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
     @Override
     public String toString() {
-        return "№" + inventoryNumber +
+        return "№" + id +
                 "\n " + author +
                 ",  \"" + nameOfBook + '\"' +
                 ", " + year +

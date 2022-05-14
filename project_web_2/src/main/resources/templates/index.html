@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+
 Click hear to see the whole list of books in the library
 <button type="submit"><a href="/bookRepository">Show all books</a></button>
 <hr>
@@ -33,6 +34,10 @@ Enter the books id to delete it from the list
 <form>
     Click hear to see all your books
     <button type="submit"><a href="/handedBooks">Show all books</a></button>
+</form>
+<hr>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
 </form>
 </body>
 </html>

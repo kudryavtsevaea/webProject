@@ -35,7 +35,7 @@ public class BooksController {
 
     @GetMapping("specificBook")
     public String getBookById(@RequestParam long bookId, Model model) {
-        Book book = bookRepository.findById(bookId + 1).get();
+        Book book = bookRepository.findById(bookId).get();
         model.addAttribute("book", book);
         model.addAttribute("bookId", book.getId());
         return "specificBook";
@@ -70,7 +70,7 @@ public class BooksController {
             commonUtil.getLogger().error("Error due to process request parameters", ex);
             throw ex;
         }
-        book.setInventoryNumber((int) (bookRepository.count()));
+        book.setId((int) (bookRepository.count()));
         bookRepository.save(book);
 
         return
