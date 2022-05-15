@@ -3,12 +3,17 @@ package com.netcracker.domain.services;
 import com.netcracker.domain.model.Action;
 import com.netcracker.domain.model.Book;
 import com.netcracker.domain.model.User;
+import com.netcracker.domain.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Date;
 
 public class Transaction {
+    @Autowired
+    private UserRepository userRepository;
+
     private User user;
     private Book book;
     private Action action;
@@ -18,24 +23,19 @@ public class Transaction {
     @PostMapping("/handedBooks")
     private String getBackAction(Transaction transaction, Model model){
        model.addAttribute("massage", transaction.print(transaction.action));
-        return "handedBooks";
+       return "handedBooks";
     }
 
   public String print (Action action){
-        if (action == Action.GIVE)
-            return user +"\t" + "'" + book.getNameOfBook() + "' \t" + date1 + "\t - \t";
-        else
-            return user +"\t" + "'" + book.getNameOfBook() + "' \t" + date1 + "\t - \t" + date2 +"\t";
+        if (action == Action.GIVE){
+            date1 = new Date();
+            return user.getUsername() +"\t" + "'" + book.getName() + "' \t" + date1 + "\t - \t";
+        }
+        else{
+            date1 = new Date();
+            date2 = new Date(12);
+        }
+            return user.getUsername() +"\t" + "'" + book.getName() + "' \t" + date1 + "\t - \t" + date2 +"\t";
   }
-
-//  public void getBook(){
-//
-//  }
-//
-//  public void giveBack(){
-//
-//  }
-
-
 
 }

@@ -59,7 +59,7 @@ public class BooksController {
         try {
             commonUtil.getLogger().debug("book for update {}", book);
             Optional.ofNullable(emptyToNull(paramMap.getFirst("info"))).ifPresent(book::setInfo);
-            Optional.ofNullable(emptyToNull(paramMap.getFirst("book"))).ifPresent(book::setNameOfBook);
+            Optional.ofNullable(emptyToNull(paramMap.getFirst("book"))).ifPresent(book::setName);
             Optional.ofNullable(emptyToNull(paramMap.getFirst("year")))
                     .filter((b) -> Integer.valueOf(b) > 1000)
                     .map(Integer::valueOf).ifPresent(book::setYear);
@@ -92,7 +92,7 @@ public class BooksController {
             try {
 
                 Optional.ofNullable(emptyToNull(paramMap.getFirst("info"))).ifPresent(book::setInfo);
-                Optional.ofNullable(emptyToNull(paramMap.getFirst("book"))).ifPresent(book::setNameOfBook);
+                Optional.ofNullable(emptyToNull(paramMap.getFirst("book"))).ifPresent(book::setName);
                 Optional.ofNullable(emptyToNull(paramMap.getFirst("year"))).map(Integer::valueOf).ifPresent(book::setYear);
                 Optional.ofNullable(emptyToNull(paramMap.getFirst("pages"))).map(Integer::valueOf).ifPresent(book::setPages);
                 Optional.ofNullable(emptyToNull(paramMap.getFirst("author"))).ifPresent(book::setAuthor);

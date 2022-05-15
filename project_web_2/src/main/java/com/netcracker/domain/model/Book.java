@@ -13,14 +13,14 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String author;
-    private String nameOfBook;
+    private String name;
     private int year;
     private int pages;
     private String info;
 
     public Book(String author, String nameOfBook, int year, int pages, String info) {
         this.author = author;
-        this.nameOfBook = nameOfBook;
+        this.name = nameOfBook;
         this.year = year;
         this.pages = pages;
         this.info = info;
@@ -43,12 +43,12 @@ public class Book {
         this.author = author;
     }
 
-    public String getNameOfBook() {
-        return nameOfBook;
+    public String getName() {
+        return name;
     }
 
-    public void setNameOfBook(String nameOfBook) {
-        this.nameOfBook = nameOfBook;
+    public void setName(String nameOfBook) {
+        this.name = nameOfBook;
     }
 
     public int getYear() {
@@ -79,7 +79,7 @@ public class Book {
     public String toString() {
         return "№" + id +
                 "\n " + author +
-                ",  \"" + nameOfBook + '\"' +
+                ",  \"" + name + '\"' +
                 ", " + year +
                 ", " + pages + " стр."
                 + "\n {" + info + "}\n";
