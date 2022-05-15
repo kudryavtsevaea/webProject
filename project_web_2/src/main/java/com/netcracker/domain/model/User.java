@@ -13,6 +13,7 @@ public class User {
     private String username;
     private String password;
     private boolean active;
+
     @ElementCollection(targetClass = Book.class, fetch = FetchType.LAZY)
     @CollectionTable(name = "user_books", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
