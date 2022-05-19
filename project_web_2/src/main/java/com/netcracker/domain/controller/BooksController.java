@@ -49,6 +49,7 @@ public class BooksController {
         return new ModelAndView(new RedirectView("/"));
     }
 
+
     @PostMapping(value = "addBook", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ModelAndView addBook(@RequestBody MultiValueMap<String, String> paramMap, ModelAndView model) {
         commonUtil.getLogger().debug("Perform addition {}", paramMap.getFirst("book"));
@@ -92,8 +93,8 @@ public class BooksController {
             try {
 
                 Optional.ofNullable(emptyToNull(paramMap.getFirst("info"))).ifPresent(book::setInfo);
-                Optional.ofNullable(emptyToNull(paramMap.getFirst("book"))).ifPresent(book::setName);
-                Optional.ofNullable(emptyToNull(paramMap.getFirst("year"))).map(Integer::valueOf).ifPresent(book::setYear);
+                Optional.ofNullable(emptyToNull(paramMap.getFirst("bookName"))).ifPresent(book::setName);
+                Optional.ofNullable(emptyToNull(paramMap.getFirst("dateOfPublishing"))).map(Integer::valueOf).ifPresent(book::setYear);
                 Optional.ofNullable(emptyToNull(paramMap.getFirst("pages"))).map(Integer::valueOf).ifPresent(book::setPages);
                 Optional.ofNullable(emptyToNull(paramMap.getFirst("author"))).ifPresent(book::setAuthor);
                 commonUtil.getLogger().debug("book after update {}", paramMap);

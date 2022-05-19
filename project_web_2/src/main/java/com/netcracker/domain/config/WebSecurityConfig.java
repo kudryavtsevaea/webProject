@@ -1,12 +1,14 @@
 package com.netcracker.domain.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 
@@ -17,29 +19,36 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                    .authorizeRequests()
-                    .antMatchers("/","/index","/bookRepository", "/error", "/handedBooks",
-                                 "/specificBook", "/registration").permitAll()
-                    .anyRequest().authenticated()
+                .authorizeRequests()
+                .antMatchers("/bookRepository", "/error", "/handedBooks",
+                        "/specificBook", "/registration").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                    .formLogin()
-                    .loginPage("/login")
-                    .permitAll()
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
                 .and()
-                    .logout()
-                    .permitAll();
+                .logout()
+                .permitAll();
     }
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .passwordEncoder(NoOpPasswordEncoder.getInstance())
-                .usersByUsernameQuery("select username, password, active, handed_books from usr where username = ?")
+                .passwordEncoder(encoder())
+                .usersByUsernameQuery("select username, password, handed_books from usr where username = ?")
                 .authoritiesByUsernameQuery("select u.username, ur.roles from usr u inner join user_role ur " +
                         "on u.id = ur.user_id where u.username = ?");
     }
 }
+

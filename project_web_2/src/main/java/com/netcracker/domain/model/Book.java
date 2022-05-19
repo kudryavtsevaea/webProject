@@ -6,11 +6,11 @@ import javax.persistence.*;
 
 @NoArgsConstructor
 @Entity
-@Table(name = "books")
+@Table(name = "bks")
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String author;
     private String name;
@@ -18,7 +18,8 @@ public class Book {
     private int pages;
     private String info;
 
-    public Book(String author, String nameOfBook, int year, int pages, String info) {
+    public Book(long id, String author, String nameOfBook, int year, int pages, String info) {
+        this.id = id;
         this.author = author;
         this.name = nameOfBook;
         this.year = year;

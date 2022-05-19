@@ -12,7 +12,6 @@ public class User {
     private int id;
     private String username;
     private String password;
-    private boolean active;
 
     @ElementCollection(targetClass = Book.class, fetch = FetchType.LAZY)
     @CollectionTable(name = "user_books", joinColumns = @JoinColumn(name = "user_id"))
@@ -46,14 +45,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public Set<Role> getRoles() {

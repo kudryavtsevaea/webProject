@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Map;
 
@@ -21,16 +23,15 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(User user, Map<String, Object> model){
+    public ModelAndView addUser(User user, Map<String, Object> model){
         User userFromDb= userRepository.findByUsername(user.getUsername());
         if (userFromDb != null){
             model.put("massage", "User is already exists.");
-            return "registration";
+            return new ModelAndView("registration");
         }
 
-        user.setActive(true);
         user.setRoles(user.getRoles());
         userRepository.save(user);
-        return "redirect:/login";
+        return new ModelAndView(new RedirectView("/login"));
     }
 }
