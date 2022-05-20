@@ -1,33 +1,33 @@
 package com.netcracker.domain.model;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "usr")
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
     private String username;
     private String password;
+    private String role;
 
-    @ElementCollection(targetClass = Book.class, fetch = FetchType.LAZY)
-    @CollectionTable(name = "user_books", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    private List<Book> handedBooks;
+    public User(long id, String username, String password, String role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -47,27 +47,20 @@ public class User {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public List<Book> getHandedBooks() {
-        return handedBooks;
-    }
-
-    public void setHandedBooks(List<Book> handedBooks) {
-        this.handedBooks = handedBooks;
+    public void setRole(String roles) {
+        this.role = role;
     }
 
     @Override
     public String toString() {
-        return
-                "Reader: '" + username + '\'' +
-                ", handed books: {" + handedBooks +
+        return "User {" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

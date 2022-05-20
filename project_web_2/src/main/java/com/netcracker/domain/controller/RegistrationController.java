@@ -1,6 +1,7 @@
 package com.netcracker.domain.controller;
 
 
+import com.netcracker.domain.model.Role;
 import com.netcracker.domain.model.User;
 import com.netcracker.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class RegistrationController {
@@ -30,7 +34,7 @@ public class RegistrationController {
             return new ModelAndView("registration");
         }
 
-        user.setRoles(user.getRoles());
+        user.setRole(Role.USER.name());
         userRepository.save(user);
         return new ModelAndView(new RedirectView("/login"));
     }
